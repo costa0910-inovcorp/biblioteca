@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
-{
-    /**
+{/**
      * Run the migrations.
      */
     public function up(): void
@@ -18,7 +17,7 @@ return new class extends Migration
             $table->text('bibliography');
             $table->string('cover_image');
             $table->decimal('price');
-            $table->foreignUuid('publisher_id')->constrained();
+            $table->foreignUuid('publisher_id')->constrained('publishers', 'id')->cascadeOnDelete();
         });
     }
 
