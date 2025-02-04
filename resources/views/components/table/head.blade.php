@@ -1,8 +1,8 @@
-        @props(['head'=> []])
+        @props(['data'=> []])
 
         <thead>
         <tr>
-            @foreach($head as $thData)
+            @foreach($data as $thData)
                 <th>{{ $thData }}</th>
             @endforeach
             <th></th>

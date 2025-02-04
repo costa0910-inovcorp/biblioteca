@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\CreateBook;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,6 +18,9 @@ Route::middleware([
     Route::get('/books', function () {
         return view('books');
     })->name('books');
+    Route::get('/books/create', function () {
+        return view('create-book');
+    })->name('books.create');
     Route::get('/publishers', function () {
         return view('dashboard');
     })->name('publishers');
