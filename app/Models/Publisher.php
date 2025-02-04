@@ -16,4 +16,11 @@ class Publisher extends Model
     {
        return $this->hasMany(Book::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'logo' => 'encrypted',
+        ];
+    }
 }

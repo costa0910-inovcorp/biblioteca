@@ -14,4 +14,13 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::get('/books', function () {
+        return view('books');
+    })->name('books');
+    Route::get('/publishers', function () {
+        return view('dashboard');
+    })->name('publishers');
+    Route::get('/authors', function () {
+        return view('dashboard');
+    })->name('authors');
 });

@@ -23,4 +23,12 @@ class Book extends Model
     {
         return $this->belongsTo(Publisher::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'cover_image' => 'encrypted',
+            'isbn' => 'encrypted',
+        ];
+    }
 }

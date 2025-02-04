@@ -12,10 +12,11 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->text('isbn');
             $table->timestamps();
             $table->string('name');
             $table->text('bibliography');
-            $table->string('cover_image');
+            $table->text('cover_image');
             $table->decimal('price');
             $table->foreignUuid('publisher_id')->constrained('publishers', 'id')->cascadeOnDelete();
         });

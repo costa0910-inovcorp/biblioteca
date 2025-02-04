@@ -20,10 +20,11 @@ class BookFactory extends Factory
         return [
             //
             'id' => $this->faker->uuid(),
+            'isbn' => $this->faker->isbn13(),
             'name' => $this->faker->name(),
             'bibliography' => $this->faker->text(),
             'cover_image' => $this->faker->imageUrl(),
-            'price' => $this->faker->numberBetween(1000, 10000),
+            'price' => $this->faker->numberBetween(100, 500),
             'publisher_id' => Publisher::factory(),
         ];
     }
