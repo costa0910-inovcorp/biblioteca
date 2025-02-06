@@ -12,6 +12,8 @@ class Author extends Model
     use HasFactory;
     public $incrementing = false;
 
+    protected $fillable = ['name', 'id', 'photo'];
+
     public function books(): belongsToMany
     {
         return $this->belongsToMany(Book::class, 'author_book', 'author_id', 'book_id');

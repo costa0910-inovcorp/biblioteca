@@ -11,7 +11,15 @@ class Book extends Model
 {
     /** @use HasFactory<\Database\Factories\BookFactory> */
     use HasFactory;
-
+    protected $fillable = [
+        'id',
+        'name',
+        'cover_image',
+        'price',
+        'bibliography',
+        'isbn',
+        'publisher_id',
+    ];
     public $incrementing = false;
 
     public function authors(): belongsToMany
@@ -19,9 +27,9 @@ class Book extends Model
         return $this->belongsToMany(Author::class, 'author_book', 'book_id', 'author_id');
     }
 
-    public function Publisher(): BelongsTo
+    public function publisher(): BelongsTo
     {
-        return $this->belongsTo(Publisher::class);
+        return $this->belongsTo(Publisher::class, 'publisher_id', 'id');
     }
 
     protected function casts(): array

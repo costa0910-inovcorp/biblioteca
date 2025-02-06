@@ -12,9 +12,11 @@ class Publisher extends Model
     use HasFactory;
     public $incrementing = false;
 
-    public function Books(): hasMany
+    protected $fillable = ['name', 'id', 'logo'];
+
+    public function books(): hasMany
     {
-       return $this->hasMany(Book::class);
+       return $this->hasMany(Book::class, 'publisher_id', 'id');
     }
 
     protected function casts(): array

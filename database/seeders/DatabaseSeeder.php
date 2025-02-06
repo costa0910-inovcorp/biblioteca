@@ -21,8 +21,10 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        $this->call(PublisherSeeder::class);
-        $this->call(BookSeeder::class);
-        $this->call(AuthorSeeder::class);
+        for ($i = 0; $i < 30; $i++) {
+            $this->call(PublisherSeeder::class);
+            $this->call(BookSeeder::class);
+            $this->call(AuthorSeeder::class);
+        }
     }
 }

@@ -1,5 +1,5 @@
 @php
-$classes = 'btn link';
+$classes = 'btn';
 @endphp
 
 <a {{ $attributes->merge(['class' => $classes]) }}>
