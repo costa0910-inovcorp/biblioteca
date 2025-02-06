@@ -22,7 +22,7 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return redirect()->route('books');
     })->name('dashboard');
-    
+
     //books
     Route::get('/books', function () {
         return view('books');

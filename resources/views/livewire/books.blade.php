@@ -75,7 +75,7 @@
                     @endforeach
                 </td>
                 <th>
-                    <div class="dropdown dropdown-top dropdown-end">
+                    <div class="dropdown dropdown-bottom dropdown-end">
                         <div tabindex="0" role="button" class="btn btn-ghost btn-xs">more</div>
                         <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[100] w-52 p-2 shadow">
                             <li><a href="{{ route("books.edit", ['book' => $book->id]) }}">Edit</a></li>
