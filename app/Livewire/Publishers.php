@@ -17,12 +17,12 @@ class Publishers extends Component
     #[url(as: 'q')]
     public ?string $search = null;
     public int $pageSize = 5;
-
-//    public array $publishersHeader = ['Nome', 'Livros'];
     public array $publishersHeader = [
         ['field' => 'Name', 'sort' => true, 'col' => 'name'],
         ['field' => 'Livros', 'sort' => false],
     ];
+
+    public $alpineData = [];
 
     public function deletePublisher(Publisher $publisher)
     {
@@ -41,9 +41,12 @@ class Publishers extends Component
                 ->where('name', 'like', '%' . $this->search . '%')
                 ->paginate($this->pageSize);
         } else {
-            $publishers = Publisher::query()->paginate($this->pageSize);
+            $publishers = Publisher::query()
+                ->with(['books'])->paginate($this->pageSize);
         }
 
+        $this->alpineData = $publishers->toArray()['data'];
+//        dd($publishers->toArray());
         return view('livewire.publishers', [
             'publishers' => $publishers,
         ]);

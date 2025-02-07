@@ -15,7 +15,6 @@
     :method="$method"
     :btn="$btn">
     <x-slot:header>
-        <a class="link link-primary" href="{{ route('authors') }}">Back</a>
-        <p class="">{{ $head }}</p>
+        <p>{{ $head }}</p>
     </x-slot:header>
 </x-generic-form>

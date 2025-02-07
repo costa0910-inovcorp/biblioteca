@@ -2,8 +2,7 @@
 
 <div class="flex flex-col items-center py-6 space-y-4">
     <div class="flex w-1/2 items-center gap-6">
-{{--        <a class="link link-primary" href="{{ route($routeName) }}">back</a>--}}
-{{--        <p class="">Create new thing</p>--}}
+        <a class="link link-primary" href="{{ url()->previous() }}">Back</a>
         {{ $header }}
     </div>
     <form wire:submit.prevent="{{ $method }}" class="space-y-4 w-1/2">

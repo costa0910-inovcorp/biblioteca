@@ -3,7 +3,7 @@
 @php
     $sizes = [5, 10, 15, 20, 25]
 @endphp
-<div class="flex items-center space-x-4">
+<div class="flex flex-col items-center space-x-4 sm:flex-row gap-2">
     <!-- Search Input -->
     <input type="text"
 {{--           wire:model.live="{{ $searchModel }}}"--}}

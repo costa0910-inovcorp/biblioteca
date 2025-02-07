@@ -3,13 +3,15 @@
             <div class="flex items-center gap-3">
                 <div class="avatar">
                     <div class="mask mask-squircle h-12 w-12">
-                        <img
-                            src="{{ url($data[$imgKey]) }}"
-                            alt="{{ $book->name ?? 'No image' }}" />
+{{--                        <img--}}
+{{--                            src="{{ url($data[$imgKey]) }}"--}}
+{{--                            alt="{{ $book->name ?? 'No image' }}" />--}}
+                        {{ $img }}
                     </div>
                 </div>
                 <div>
-                    <div class="font-bold">{{ $data->name }}</div>
+{{--                    <div class="font-bold">{{ $data->name }}</div>--}}
+                    {{ $slot }}
                 </div>
             </div>
         </td>

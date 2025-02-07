@@ -23,7 +23,7 @@ class Books extends Component
     public array $booksHeader = [
         ['field' => 'Name', 'sort' => true, 'col' => 'name'],
         ['field' => 'ISBN', 'sort' => false, 'col' => 'isbn'],
-        ['field' => 'Bibliografia', 'sort' => false, 'col' => 'bibliography'],
+        ['field' => 'Bibliografia', 'sort' => true, 'col' => 'bibliography'],
         ['field' => 'Editoras', 'sort' => true, 'col' => 'publisher'],
         ['field' => 'Preço', 'sort' => true, 'col' => 'price'],
         ['field' => 'Autores', 'sort' => false, 'col' => 'author'],
@@ -43,7 +43,7 @@ class Books extends Component
             $this->resetPage();
             $books = $this->searchBooks();
         } else {
-            $books = Book::with(['publisher', 'authors'])->orderBy('name')->paginate($this->pageSize);
+            $books = Book::with(['publisher', 'authors'])->paginate($this->pageSize);
         }
 
         // set data for alpine
@@ -59,7 +59,7 @@ class Books extends Component
             'author' => $this->queryNested('authors'),
             default =>  Book::query()->with(['publisher', 'authors'])
             ->where($this->selectedField, 'like', '%' . $this->search . '%')
-            ->orderBy('name')->paginate($this->pageSize),
+            ->paginate($this->pageSize),
         };
     }
 
@@ -68,6 +68,6 @@ class Books extends Component
         return Book::query()->with(['publisher', 'authors'])
             ->whereHas($table, function ($q)  {
                 $q->where('name', 'like', '%' . $this->search . '%');
-            })->orderBy('name')->paginate($this->pageSize);
+            })->paginate($this->pageSize);
     }
 }

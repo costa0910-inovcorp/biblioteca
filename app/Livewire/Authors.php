@@ -21,11 +21,12 @@ class Authors extends Component
     public string $selectedField = 'name'; // Default field to search by
     public array $fields = ['name', 'books'];
 
-//    public array $authorsHeader = ['Nome', 'Livros'];
     public array $authorsHeader = [
         ['field' => 'Nome', 'sort' => true, 'col' => 'name'],
         ['field' => 'Livros', 'sort' => false],
     ];
+
+    public array $alpineData = [];
 
     public function render()
     {
@@ -40,9 +41,12 @@ class Authors extends Component
                 $authors = $this->queryNested('books');
             }
         } else {
-            $authors = Author::query()->paginate($this->pageSize);
+            $authors = Author::query()
+                ->with(['books'])
+                ->paginate($this->pageSize);
         }
 
+        $this->alpineData = $authors->toArray()['data'];
         return view('livewire.authors', ['authors' => $authors]);
     }
 
@@ -57,6 +61,6 @@ class Authors extends Component
         return Author::query()->with([$table])
             ->whereHas($table, function ($q)  {
                 $q->where('name', 'like', '%' . $this->search . '%');
-            })->orderBy('name')->paginate($this->pageSize);
+            })->paginate($this->pageSize);
     }
 }

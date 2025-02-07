@@ -16,7 +16,7 @@
     fileLabel="Logo"
     :btn="$btn">
     <x-slot:header>
-        <a class="link link-primary" href="{{ route('publishers') }}">Back</a>
-        <p class="">{{ $head }}</p>
+{{--        <a class="link link-primary" href="{{ route('publishers') }}">Back</a>--}}
+        <p>{{ $head }}</p>
     </x-slot:header>
 </x-generic-form>
