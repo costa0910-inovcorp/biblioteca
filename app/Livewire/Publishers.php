@@ -18,7 +18,11 @@ class Publishers extends Component
     public ?string $search = null;
     public int $pageSize = 5;
 
-    public array $publishersHeader = ['Nome', 'Livros'];
+//    public array $publishersHeader = ['Nome', 'Livros'];
+    public array $publishersHeader = [
+        ['field' => 'Name', 'sort' => true, 'col' => 'name'],
+        ['field' => 'Livros', 'sort' => false],
+    ];
 
     public function deletePublisher(Publisher $publisher)
     {

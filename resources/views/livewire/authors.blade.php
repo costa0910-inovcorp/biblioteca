@@ -14,7 +14,7 @@
 
     <x-table>
         <thead>
-        <x-table.head :data="$authorsHeader"/>
+        <x-table.head :headData="$authorsHeader"/>
         </thead>
         <tbody>
         @if($authors == null)

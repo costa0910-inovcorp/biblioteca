@@ -21,7 +21,12 @@ class Authors extends Component
     public string $selectedField = 'name'; // Default field to search by
     public array $fields = ['name', 'books'];
 
-    public array $authorsHeader = ['Nome', 'Livros'];
+//    public array $authorsHeader = ['Nome', 'Livros'];
+    public array $authorsHeader = [
+        ['field' => 'Nome', 'sort' => true, 'col' => 'name'],
+        ['field' => 'Livros', 'sort' => false],
+    ];
+
     public function render()
     {
         if ($this->search) {

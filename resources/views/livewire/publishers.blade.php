@@ -12,7 +12,7 @@
 
     <x-table>
         <thead>
-        <x-table.head :data="$publishersHeader"/>
+        <x-table.head :headData="$publishersHeader"/>
         </thead>
         <tbody>
         @if($publishers == null)
