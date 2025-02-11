@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RolesEnum;
 use App\Exports\AuthorsExport;
 use App\Exports\BooksExport;
 use App\Exports\PublishersExport;
@@ -18,10 +19,26 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        if (request()->user()->hasRole(RolesEnum::ADMIN)) {
+            return redirect()->route('books');
+        }
+        return redirect() ->route('request-books');
+        });
+    });
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
     'role:admin'
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return redirect()->route('books');
+       if (request()->user()->can('manage books')) {
+           return redirect()->route('books');
+       }
+       return view('/dashboard');
     })->name('dashboard');
 
     //books
@@ -53,4 +70,14 @@ Route::middleware([
     Route::get('/authors/export', function () {
         return Excel::download(new AuthorsExport(), 'autores.xlsx');
     })->name('authors.export');
+});
+
+// request book
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'can:manage books'
+])->group(function () {
+    Route::get('/request-books', function () {})->name('request-books');
 });

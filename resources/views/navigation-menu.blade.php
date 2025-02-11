@@ -16,18 +16,26 @@
 {{--                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">--}}
 {{--                        {{ __('Dashboard') }}--}}
 {{--                    </x-nav-link>--}}
+                    @role('admin')
+                        <x-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
+                            {{ __('Livros') }}
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
-                        {{ __('Livros') }}
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('publishers') }}" :active="request()->routeIs('publishers')">
+                            {{ __('Editoras') }}
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('publishers') }}" :active="request()->routeIs('publishers')">
-                        {{ __('Editoras') }}
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
+                            {{ __('Autores') }}
+                        </x-nav-link>
+                    @endrole
 
-                    <x-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
-                        {{ __('Autores') }}
-                    </x-nav-link>
+{{--                    both admin and user can access this route--}}
+                    @can('manage books')
+                        <x-nav-link href="{{ route('request-books') }}" :active="request()->routeIs('request-books')">
+                            {{ __('Request books') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -155,17 +163,26 @@
 {{--            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">--}}
 {{--                {{ __('Dashboard') }}--}}
 {{--            </x-responsive-nav-link>--}}
-            <x-responsive-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
-                {{ __('Livros') }}
-            </x-responsive-nav-link>
+            @role('admin')
+                <x-responsive-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
+                    {{ __('Livros') }}
+                </x-responsive-nav-link>
 
-            <x-responsive-nav-link href="{{ route('publishers') }}" :active="request()->routeIs('publishers')">
-                {{ __('Editoras') }}
-            </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('publishers') }}" :active="request()->routeIs('publishers')">
+                    {{ __('Editoras') }}
+                </x-responsive-nav-link>
 
-            <x-responsive-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
-                {{ __('Autores') }}
-            </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
+                    {{ __('Autores') }}
+                </x-responsive-nav-link>
+            @endrole
+
+            @can('manage books')
+
+                <x-responsive-nav-link href="{{ route('request-books') }}" :active="request()->routeIs('request-books')">
+                    {{ __('Request books') }}
+                </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

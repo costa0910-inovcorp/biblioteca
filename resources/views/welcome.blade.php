@@ -27,24 +27,35 @@
                         @if (Route::has('login'))
                             <nav class="w-full">
                                 @auth
-                                    <a
-                                        href="{{ url('/books') }}"
-                                        class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                    >
-                                        Livros
-                                    </a>
-                                    <a
-                                        href="{{ url('/authors') }}"
-                                        class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                    >
-                                        Autores
-                                    </a>
-                                    <a
-                                        href="{{ url('/publishers') }}"
-                                        class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                    >
-                                        Editoras
-                                    </a>
+                                    @role('admin')
+                                        <a
+                                            href="{{ url('/books') }}"
+                                            class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                        >
+                                            Livros
+                                        </a>
+                                        <a
+                                            href="{{ url('/authors') }}"
+                                            class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                        >
+                                            Autores
+                                        </a>
+                                        <a
+                                            href="{{ url('/publishers') }}"
+                                            class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                        >
+                                            Editoras
+                                        </a>
+                                    @endrole
+
+                                    @can('manage books')
+                                        <a
+                                            href="{{ url('/request-books') }}"
+                                            class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                        >
+                                            Request books
+                                        </a>
+                                    @endcan
                                 @else
                                     <a
                                         href="{{ route('login') }}"

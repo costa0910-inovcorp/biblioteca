@@ -23,6 +23,9 @@ class BookRequestFactory extends Factory
         $book->is_available = false;
         $user = User::factory()->create();
         $user->assignRole(RolesEnum::CITIZEN);
+
+        $user->save();
+        $book->save();
         return [
             'book_id' => $book->id,
             'user_id' => $user->id,
