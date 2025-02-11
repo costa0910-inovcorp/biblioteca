@@ -31,7 +31,7 @@
                     @endrole
 
 {{--                    both admin and user can access this route--}}
-                    @can('manage books')
+                    @can('request books')
                         <x-nav-link href="{{ route('request-books') }}" :active="request()->routeIs('request-books')">
                             {{ __('Request books') }}
                         </x-nav-link>
@@ -177,7 +177,7 @@
                 </x-responsive-nav-link>
             @endrole
 
-            @can('manage books')
+            @can('request books')
 
                 <x-responsive-nav-link href="{{ route('request-books') }}" :active="request()->routeIs('request-books')">
                     {{ __('Request books') }}

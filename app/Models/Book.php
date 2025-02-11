@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use phpDocumentor\Reflection\Types\This;
 
 class Book extends Model
 {
@@ -30,6 +32,10 @@ class Book extends Model
     public function publisher(): BelongsTo
     {
         return $this->belongsTo(Publisher::class, 'publisher_id', 'id');
+    }
+
+    public function requests(): HasMany {
+        return $this->hasMany(BookRequest::class, 'book_id', 'id');
     }
 
     protected function casts(): array

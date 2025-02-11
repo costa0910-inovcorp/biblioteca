@@ -34,14 +34,6 @@ Route::middleware([
     'verified',
     'role:admin'
 ])->group(function () {
-    Route::get('/dashboard', function () {
-       if (request()->user()->can('manage books')) {
-           return redirect()->route('books');
-       }
-       return view('/dashboard');
-    })->name('dashboard');
-
-    //books
     Route::get('/books', function () {
         return view('books');
     })->name('books');
@@ -77,7 +69,9 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-    'can:manage books'
+    'can:request books'
 ])->group(function () {
-    Route::get('/request-books', function () {})->name('request-books');
+    Route::get('/request-books', function () {
+        return view('request-books');
+    })->name('request-books');
 });
