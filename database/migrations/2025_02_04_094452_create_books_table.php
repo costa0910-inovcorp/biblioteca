@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('bibliography');
             $table->text('cover_image');
             $table->decimal('price');
+            $table->boolean('is_available')->default(true);
             $table->foreignUuid('publisher_id')->constrained('publishers', 'id')->cascadeOnDelete();
         });
     }

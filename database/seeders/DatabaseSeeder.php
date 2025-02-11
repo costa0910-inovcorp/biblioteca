@@ -35,10 +35,11 @@ class DatabaseSeeder extends Seeder
 
         $user->assignRole(RolesEnum::ADMIN);
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $this->call(PublisherSeeder::class);
             $this->call(BookSeeder::class);
             $this->call(AuthorSeeder::class);
+            $this->call(BookRequestSeeder::class);
         }
     }
 
