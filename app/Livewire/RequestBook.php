@@ -11,14 +11,7 @@ class RequestBook extends Component
     public array $availableToBorrow = [];
     public array $booksToBorrow = [];
 
-    public function mount(): void
-    {
-        $this->availableToBorrow = Book::query()
-            ->get()
-            ->take(5)
-            ->toArray();
-    }
-
+    public string $searchBookByName = '';
 
     public function borrow(): void {
         $maxToBorrow = 3 - auth()->user()->books_request_count; //Max 3 books
@@ -36,16 +29,53 @@ class RequestBook extends Component
 
     public function add(string $bookId): void
     {
-        $book = Book::findOrFail($bookId);
+        $book = Book::findOrFail($bookId)->toArray();
 
-        $this->booksToBorrow[] = [
-            'user_id' => auth()->user()->id,
-            'book' => $book
-        ];
+        $this->booksToBorrow[] = $book;
+        $this->availableToBorrow = $this->filterBooks($this->availableToBorrow, $bookId);
+    }
+
+    public function remove(string $bookId): void
+    {
+        $books = array_filter($this->booksToBorrow, function ($item) use ($bookId) {
+            return $item['id'] == $bookId;
+        });
+        $this->booksToBorrow = $this->filterBooks($this->booksToBorrow, $bookId);
+        $this->availableToBorrow[] = array_pop($books);
+    }
+
+    protected function filterBooks($collection, string $bookId): array
+    {
+        return collect($collection)->filter(function ($book) use ($bookId) {
+            return $book['id'] != $bookId;
+        })->toArray();
     }
 
     public function render()
     {
+        if (empty($this->searchBookByName)) {
+            $this->availableToBorrow = Book::query()
+                ->where('is_available', true)
+                ->get()
+                ->take(5)
+                ->toArray();
+        } else {
+            $this->availableToBorrow = Book::query()
+                ->where('is_available', true)
+                ->where('name', 'like', '%' . $this->searchBookByName . '%')
+                ->get()
+                ->take(5)
+                ->toArray();
+        }
+
+        //filter out book that already added
+        $this->availableToBorrow = array_filter($this->availableToBorrow, function ($item) {
+            return !collect($this->booksToBorrow)
+                ->pluck('id')
+                ->contains($item['id']);
+        });
+//        dd($this->availableToBorrow);
+
         return view('livewire.request-book');
     }
 }

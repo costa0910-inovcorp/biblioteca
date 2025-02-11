@@ -1,15 +1,16 @@
-<form wire:submit.prevent="borrow" class="p-4 md:w-1/2 space-y-4 mx-auto min-h-full">
-    <div>
-        <div class="dropdown dropdown-bottom w-64">
+<form wire:submit.prevent="borrow" class="space-y-4 min-h-full md:flex gap-4">
+    <div class="w-full">
+        <div class="dropdown dropdown-bottom w-64 min-w-28">
             {{--        <div tabindex="0" role="button" class="btn m-1">Click</div>--}}
             <div class="space-y-1">
                 <x-label for="book-to-borrow" value="Books to Borrow (max 3)" />
                 <input tabindex="0" type="text"
                        id="book-to-borrow"
-                       {{--           wire:model.live="{{ $searchModel }}}"--}}
-                       {{--               wire:model.live.debounce.300ms="search"--}}
-                       class="input input-bordered  w-64"
-                       placeholder="Search book by name..."  />
+                       wire:model.live.debounce.300ms="searchBookByName"
+                       class="input input-bordered  w-64 min-w-28"
+                       placeholder="Search book by name..."
+                       autocomplete="off"
+                />
                 <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-64 p-2 shadow overflow-auto">
                     @foreach( $availableToBorrow as $book)
                         <li wire:click="add('{{ $book['id'] }}')"><button type="button">{{ $book['name'] }}</button></li>
@@ -20,10 +21,10 @@
                 </ul>
             </div>
         </div>
-        <div class="flex w-62 flex-wrap gap-2 mt-2">
+        <div class="flex w-62 min-w-36 flex-wrap gap-2 mt-2">
             @foreach($booksToBorrow as $selectBook)
-                <button type="button" class="btn">
-                    {{ $selectBook['book']->name }}
+                <button wire:click="remove('{{ $selectBook['id'] }}')" type="button" class="btn">
+                    {{ $selectBook['name'] }}
                     <div class="badge flex items-center justify-center">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -65,5 +66,5 @@
 {{--        <x-select id="book-to-borrow" :options="$availableToBorrow" model="bookToBorrow" :multiple="false" default="Witch book do you want to borrow?"/>--}}
 {{--        <x-input-error for="bookToBorrow"/>--}}
 {{--    </div>--}}
-    <button type="submit" class="btn btn-active btn-primary">Borrow</button>
+    <button type="submit" class="btn btn-active btn-primary w-62 ">Borrow</button>
 </form>
