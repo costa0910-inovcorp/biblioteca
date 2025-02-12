@@ -21,6 +21,7 @@ class Book extends Model
         'bibliography',
         'isbn',
         'publisher_id',
+        'is_available',
     ];
     public $incrementing = false;
 

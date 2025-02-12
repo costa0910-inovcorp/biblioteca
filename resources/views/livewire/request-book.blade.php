@@ -1,9 +1,17 @@
-<form wire:submit.prevent="borrow" class="space-y-4 min-h-full md:flex gap-4">
+@php
+    if ($maxToBorrow == 0) {
+        $valueText = 'Return some books to borrow again';
+    } else {
+        $valueText = "Books to Borrow (max $maxToBorrow)";
+    }
+@endphp
+
+<form wire:submit.prevent="borrow" class="space-y-4 min-h-full md:flex">
     <div class="w-full">
         <div class="dropdown dropdown-bottom w-64 min-w-28">
             {{--        <div tabindex="0" role="button" class="btn m-1">Click</div>--}}
             <div class="space-y-1">
-                <x-label for="book-to-borrow" value="Books to Borrow (max 3)" />
+                <x-label for="book-to-borrow" :value="$valueText" />
                 <input tabindex="0" type="text"
                        id="book-to-borrow"
                        wire:model.live.debounce.300ms="searchBookByName"

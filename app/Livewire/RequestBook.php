@@ -2,9 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Events\BookRequested;
 use App\Models\Book;
-use Livewire\Attributes\Validate;
+use App\Models\BookRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use function Pest\Laravel\get;
 
 class RequestBook extends Component
 {
@@ -13,18 +17,54 @@ class RequestBook extends Component
 
     public string $searchBookByName = '';
 
+    public int $maxToBorrow = 0;
+    protected const LIMIT_TO_BORROW = 10;
+
+    public function mount()
+    {
+        $this->maxToBorrow = self::LIMIT_TO_BORROW - auth()->user()->books_request_count;
+    }
+
     public function borrow(): void {
-        $maxToBorrow = 3 - auth()->user()->books_request_count; //Max 3 books
         $this->validate(rules: [
-            'booksToBorrow' => "required|array|min:1|max:$maxToBorrow",
+            'booksToBorrow' => "required|array|min:1|max:$this->maxToBorrow",
         ], messages: [
             'booksToBorrow.required' => 'You must select at least one book to borrow.',
             'booksToBorrow.min' => 'You must select at least one book.',
-            'booksToBorrow.max' => 'You can only borrow up to 3 books.',
+            'booksToBorrow.max' => $this->maxToBorrow ?
+                "You can only borrow up to $this->maxToBorrow books at a time." :
+                "You are not allowed to borrow books.",
         ]);
 
 
-        dd($this->booksToBorrow);
+        DB::transaction(function() {
+            $authUser = auth()->user();
+
+            foreach ($this->booksToBorrow as $book) {
+                $request = BookRequest::create([
+                    //TODO: ask nuno if to let user choose return date and if to emit only one event
+                    'book_id' => $book['id'],
+                    'user_id' => $authUser->id,
+                    'user_name' => $authUser->name,
+                    'user_email' => $authUser->email,
+                ]);
+
+                Book::where('id', $book['id'])->update([
+                    'is_available' => false,
+                ]);
+
+                //TODO: emit event, that's request has been made
+                BookRequested::dispatch($request);
+            }
+
+            $user = User::query()->where('id', $authUser->id)->first();
+            $user->books_request_count += count($this->booksToBorrow);
+            $user->save();
+
+
+            $this->maxToBorrow = self::LIMIT_TO_BORROW - $user->books_request_count;
+        });
+        $this->reset('booksToBorrow');
     }
 
     public function add(string $bookId): void
@@ -53,6 +93,7 @@ class RequestBook extends Component
 
     public function render()
     {
+//        dd(BookRequest::query()->where('user_id', auth()->id())->get()->toArray());
         if (empty($this->searchBookByName)) {
             $this->availableToBorrow = Book::query()
                 ->where('is_available', true)
@@ -74,7 +115,8 @@ class RequestBook extends Component
                 ->pluck('id')
                 ->contains($item['id']);
         });
-//        dd($this->availableToBorrow);
+//        dd(auth()->user()->books_request_count);
+//        $this->maxToBorrow = $this->allowToBorrow(auth()->user()->books_request_count);
 
         return view('livewire.request-book');
     }
