@@ -59,6 +59,7 @@
                         </div>
                         <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[100] w-52 p-2 shadow">
                             <li><a x-bind:href="window.location.origin + '/books/edit/' + book.id">Edit</a></li>
+                            <li><a x-bind:href="window.location.origin + '/books/show/' + book.id">Details</a></li>
                             <li>
                                 <button @click="toggleModal(book.id)">delete</button>
                             </li>

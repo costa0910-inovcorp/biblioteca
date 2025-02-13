@@ -9,6 +9,7 @@ use App\Livewire\CreateAuthor;
 use App\Livewire\CreateBook;
 use App\Livewire\CreatePublisher;
 use App\Livewire\EditBook;
+use App\Livewire\ShowBook;
 use App\Models\Book;
 use App\Models\BookRequest;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +44,7 @@ Route::middleware([
     })->name('books');
     Route::get('/books/create', CreateBook::class)->name('books.create');
     Route::get('/books/edit/{book}', EditBook::class)->name('books.edit');
+    Route::get('/books/show/{book}', ShowBook::class)->name('books.show');
     Route::get('/books/export', function () {
         return Excel::download(new BooksExport(), 'livros.xlsx');
     })->name('books.export');
