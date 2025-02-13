@@ -21,22 +21,28 @@
                             @auth
                                 @role('admin')
                                 <a
+                                    href="{{ url('/users') }}"
+                                    class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                >
+                                    Users
+                                </a>
+                                <a
                                     href="{{ url('/books') }}"
                                     class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                 >
-                                    Livros
+                                    Books
                                 </a>
                                 <a
                                     href="{{ url('/authors') }}"
                                     class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                 >
-                                    Autores
+                                    Authors
                                 </a>
                                 <a
                                     href="{{ url('/publishers') }}"
                                     class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                                 >
-                                    Editoras
+                                    Publishers
                                 </a>
                                 @endrole
 
@@ -97,19 +103,19 @@
                             href="{{ url('/books') }}"
                             class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                         >
-                            Livros
+                            Books
                         </a>
                         <a
                             href="{{ url('/authors') }}"
                             class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                         >
-                            Autores
+                            Authors
                         </a>
                         <a
                             href="{{ url('/publishers') }}"
                             class="link link-primary rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                         >
-                            Editoras
+                            Publishers
                         </a>
                         @endrole
 

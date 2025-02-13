@@ -18,7 +18,7 @@ class RequestBook extends Component
     public string $searchBookByName = '';
 
     public int $maxToBorrow = 0;
-    protected const LIMIT_TO_BORROW = 21;
+    protected const LIMIT_TO_BORROW = 3;
 
     public function mount()
     {
@@ -36,10 +36,12 @@ class RequestBook extends Component
                 "You are not allowed to borrow books.",
         ]);
 
+        $authUser = auth()->user();
+        if ($authUser->books_request_count >= self::LIMIT_TO_BORROW) {
+            abort(403, 'You can not request more than 3 books at the same time.');
+        }
 
-        DB::transaction(function() {
-            $authUser = auth()->user();
-
+        DB::transaction(function() use ($authUser) {
             foreach ($this->booksToBorrow as $book) {
                 //TODO: ask Nuno if to let user choose return date and if to emit only one event
                 $request = BookRequest::create([

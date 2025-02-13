@@ -29,7 +29,7 @@ Route::middleware([
         if (request()->user()->hasRole(RolesEnum::ADMIN)) {
             return redirect()->route('books');
         }
-        return redirect() ->route('request-books');
+        return redirect()->route('request-books');
         });
     });
 
@@ -68,6 +68,11 @@ Route::middleware([
     Route::get('/authors/export', function () {
         return Excel::download(new AuthorsExport(), 'autores.xlsx');
     })->name('authors.export');
+
+    //Users
+    Route::get('/users', function () {
+        return view('users');
+    })->name('users');
 });
 
 // request book

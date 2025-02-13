@@ -17,16 +17,19 @@
 {{--                        {{ __('Dashboard') }}--}}
 {{--                    </x-nav-link>--}}
                     @role('admin')
+                        <x-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
+                            {{ __('Users') }}
+                        </x-nav-link>
                         <x-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
-                            {{ __('Livros') }}
+                            {{ __('Books') }}
                         </x-nav-link>
 
                         <x-nav-link href="{{ route('publishers') }}" :active="request()->routeIs('publishers')">
-                            {{ __('Editoras') }}
+                            {{ __('Publishers') }}
                         </x-nav-link>
 
                         <x-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
-                            {{ __('Autores') }}
+                            {{ __('Authors') }}
                         </x-nav-link>
                     @endrole
 
@@ -164,16 +167,19 @@
 {{--                {{ __('Dashboard') }}--}}
 {{--            </x-responsive-nav-link>--}}
             @role('admin')
+                <x-responsive-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
+                    {{ __('Users') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
-                    {{ __('Livros') }}
+                    {{ __('Books') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ route('publishers') }}" :active="request()->routeIs('publishers')">
-                    {{ __('Editoras') }}
+                    {{ __('Publishers') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
-                    {{ __('Autores') }}
+                    {{ __('Authors') }}
                 </x-responsive-nav-link>
             @endrole
 
