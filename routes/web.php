@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\RolesEnum;
+use App\Events\BookRequested;
 use App\Exports\AuthorsExport;
 use App\Exports\BooksExport;
 use App\Exports\PublishersExport;
@@ -8,6 +9,9 @@ use App\Livewire\CreateAuthor;
 use App\Livewire\CreateBook;
 use App\Livewire\CreatePublisher;
 use App\Livewire\EditBook;
+use App\Models\Book;
+use App\Models\BookRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -74,4 +78,29 @@ Route::middleware([
     Route::get('/request-books', function () {
         return view('request-books');
     })->name('request-books');
+
+    Route::get('/public-books-request/{book}', function (Book $book) {
+        if (!$book->exists || !$book->is_available) {
+            abort(404);
+        }
+
+        DB::transaction(function () use ($book) {
+            $user = auth()->user();
+            $requestBook = BookRequest::create([
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'user_email' => $user->email,
+                'book_id' => $book->id,
+            ]);
+
+            $user->books_request_count += 1;
+            $user->save();
+            $book->is_available = false;
+            $book->save();
+
+            BookRequested::dispatch($requestBook);
+        });
+
+        return redirect()->route('request-books');
+    })->name('public.books.request');
 });

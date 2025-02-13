@@ -7,8 +7,8 @@ use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\On;
 use Livewire\Component;
-use function Pest\Laravel\get;
 
 class RequestBook extends Component
 {
@@ -18,7 +18,7 @@ class RequestBook extends Component
     public string $searchBookByName = '';
 
     public int $maxToBorrow = 0;
-    protected const LIMIT_TO_BORROW = 10;
+    protected const LIMIT_TO_BORROW = 21;
 
     public function mount()
     {
@@ -41,8 +41,8 @@ class RequestBook extends Component
             $authUser = auth()->user();
 
             foreach ($this->booksToBorrow as $book) {
+                //TODO: ask Nuno if to let user choose return date and if to emit only one event
                 $request = BookRequest::create([
-                    //TODO: ask nuno if to let user choose return date and if to emit only one event
                     'book_id' => $book['id'],
                     'user_id' => $authUser->id,
                     'user_name' => $authUser->name,
@@ -65,6 +65,7 @@ class RequestBook extends Component
             $this->maxToBorrow = self::LIMIT_TO_BORROW - $user->books_request_count;
         });
         $this->reset('booksToBorrow');
+        $this->dispatch('books-borrowed');
     }
 
     public function add(string $bookId): void
@@ -89,6 +90,14 @@ class RequestBook extends Component
         return collect($collection)->filter(function ($book) use ($bookId) {
             return $book['id'] != $bookId;
         })->toArray();
+    }
+    #[On('book-returned')]
+    public function updateMaxBorrow($id) {
+        if ($id == auth()->id()) {
+            //Same user, update it's max books to borrow
+            $user = User::query()->findOrFail($id);
+            $this->maxToBorrow = self::LIMIT_TO_BORROW - $user->books_request_count;
+        }
     }
 
     public function render()

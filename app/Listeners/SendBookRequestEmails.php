@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Enums\RolesEnum;
 use App\Events\BookRequested;
+use App\Mail\AdminBookRequestNotification;
 use App\Mail\RequestConfirmation;
 use App\Models\Book;
 use App\Models\BookRequest;
@@ -27,22 +28,24 @@ class SendBookRequestEmails implements ShouldQueue
      */
     public function handle(BookRequested $event): void
     {
-        $requestDetails = $event->requestBook;
+        $requestDetails = $event->requestBook->toArray();
         //TODO: FIND USER IN DB WITH ID AND SEND EMAIL TO USER
-        $user = User::query()->findOrFail($requestDetails->user_id);
-        $book = Book::query()->findOrFail($requestDetails->book_id);
-        $this->sendEmail($user->email, $book, $user->name);
+        $book = Book::query()->findOrFail($requestDetails['book_id']);
+        $data = array_merge($requestDetails,[
+            'book_name' => $book->name,
+            'cover_image' => $book->cover_image,
+        ]);
+
+        Mail::to($data['user_email'])->send(new RequestConfirmation($data));
 
         //TODO: LOOP TO ADMINS AND SEND THEM EMAIL
         $admins = User::role(RolesEnum::ADMIN)->get();
         foreach ($admins as $admin) {
-            $this->sendEmail($admin->email, $book, $user->name);
-        }
-    }
+            $adminData = array_merge($data,[
+                'admin_name' => $admin->name
+            ]);
 
-    //TODO: MAKE PROTECTED METHOD TO SEND EMAIL
-    protected function sendEmail(string $email, Book $requestDetails, ?string $userName): void
-    {
-        Mail::to($email)->send(new RequestConfirmation($requestDetails, $userName));
+            Mail::to($admin->email)->send(new AdminBookRequestNotification($adminData));
+        }
     }
 }

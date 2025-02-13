@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use App\Models\Book;
-use App\Models\BookRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class RequestConfirmation extends Mailable
+class AdminBookRequestNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -29,7 +28,7 @@ class RequestConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Request Confirmation',
+            subject: 'Admin Book Request Notification',
         );
     }
 
@@ -39,7 +38,7 @@ class RequestConfirmation extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.request-confirmation',
+            view: 'emails.Admin-book-request-notification',
         );
     }
 
