@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\RolesEnum;
 use App\Models\Book;
 use App\Models\Publisher;
 use App\Models\User;
@@ -17,12 +18,25 @@ class Users extends Component
     public string $selectedField = 'name';
     public array $fields = ['name', 'email'];
     public array $usersHeader = [
-        ['field' => 'Name', 'col' => 'name', 'sort' => true],
-        ['field' => 'Email', 'col' => 'email', 'sort' => true],
+        ['field' => 'Name', 'col' => 'name', 'sort' => false],
+        ['field' => 'Email', 'col' => 'email', 'sort' => false],
+        ['field' => 'Role', 'col' => 'role', 'sort' => false],
     ];
     public int $pageSize = 5;
 
-    public $alpineData = [];
+    public function add(User $user): void
+    {
+        $user->assignRole(RolesEnum::ADMIN);
+        $user->save();
+        $this->dispatch('refresh');
+    }
+
+    public function remove(User $user): void
+    {
+        $user->removeRole(RolesEnum::ADMIN);
+        $user->save();
+        $this->dispatch('refresh');
+    }
 
 
     public function render()
@@ -31,12 +45,14 @@ class Users extends Component
             $this->resetPage();
             $users = User::query()
                 ->where($this->selectedField, 'like', '%' . $this->search . '%')
+                ->where('id', '!=', auth()->id()) // exclude logged user
                 ->paginate($this->pageSize);
         } else {
-            $users = User::query()->paginate($this->pageSize);
+            $users = User::query()
+                ->where('id', '!=', auth()->id())// exclude logged user
+                ->paginate($this->pageSize);
         }
 
-        $this->alpineData = $users->toArray()['data'];
         return view('livewire.users', compact('users'));
     }
 }

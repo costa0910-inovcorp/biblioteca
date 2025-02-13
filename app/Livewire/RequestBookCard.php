@@ -7,6 +7,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Carbon\Carbon;
 
+//TODO: FIND WAY TO SHOW BOTH BOOK AND USER,
+// CURRENTLY ONLY BOOK HAS BEEN SHOWN
 class RequestBookCard extends Component
 {
     #[Locked]
@@ -32,8 +34,8 @@ class RequestBookCard extends Component
         });
 
         $this->reset('returnDate');
-        $this->dispatch('book-returned', id: $this->requestBook->user_id); //If update books user listening can borrow(or other things if needed)
         $this->requestBook->refresh();
+        $this->dispatch('book-returned', id: $this->requestBook->user_id); //If update books user listening can borrow(or other things if needed)
     }
 
 

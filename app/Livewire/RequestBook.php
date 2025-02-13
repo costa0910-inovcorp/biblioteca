@@ -66,7 +66,7 @@ class RequestBook extends Component
 
             $this->maxToBorrow = self::LIMIT_TO_BORROW - $user->books_request_count;
         });
-        $this->reset('booksToBorrow');
+        $this->reset('searchBookByName', 'booksToBorrow');
         $this->dispatch('books-borrowed');
     }
 

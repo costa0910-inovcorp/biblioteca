@@ -10,6 +10,7 @@ use App\Livewire\CreateBook;
 use App\Livewire\CreatePublisher;
 use App\Livewire\EditBook;
 use App\Livewire\ShowBook;
+use App\Livewire\ShowUser;
 use App\Models\Book;
 use App\Models\BookRequest;
 use Illuminate\Support\Facades\DB;
@@ -73,6 +74,7 @@ Route::middleware([
     Route::get('/users', function () {
         return view('users');
     })->name('users');
+    Route::get('/users/show/{user}', ShowUser::class)->name('users.show');
 });
 
 // request book
