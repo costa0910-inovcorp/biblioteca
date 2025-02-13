@@ -81,11 +81,15 @@ Route::middleware([
 
     Route::get('/public-books-request/{book}', function (Book $book) {
         if (!$book->exists || !$book->is_available) {
-            abort(404);
+            abort(404, 'Book not found or is not available.');
         }
 
-        DB::transaction(function () use ($book) {
-            $user = auth()->user();
+        $user = auth()->user();
+        if ($user->books_request_count >= 3) {
+            abort(403, 'You can not request more than 3 books at the same time.');
+        }
+
+        DB::transaction(function () use ($book, $user) {
             $requestBook = BookRequest::create([
                 'user_id' => $user->id,
                 'user_name' => $user->name,
