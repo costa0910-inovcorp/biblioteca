@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignUuid('book_id')->constrained('books', 'id')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
-            $table->date('predicted_return_date')->default(now()->addDays(5));
+            $table->date('predicted_return_date')->default(today()->addDays(5));
             $table->date('return_date')->nullable();
             $table->string('user_name');
             $table->string('user_email');

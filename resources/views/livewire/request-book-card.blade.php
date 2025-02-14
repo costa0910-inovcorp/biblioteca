@@ -57,16 +57,3 @@
         </div>
     </div>
 </div>
-
-
-<script>
-    Livewire.on('dateUpdated', (newDate) => {
-        // Close the modal
-        alert(newDate);
-        document.querySelector('.modal').style.display = 'none';
-
-        // Update the displayed return date
-        // Optionally, you can also do this dynamically if needed
-        document.querySelector('.return-date').innerText = newDate;
-    });
-</script>

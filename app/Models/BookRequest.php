@@ -11,7 +11,7 @@ class BookRequest extends Model
     /** @use HasFactory<\Database\Factories\BookRequestFactory> */
     use HasFactory;
 
-    protected $fillable = ['user_id', 'book_id', 'user_name', 'user_email'];
+    protected $fillable = ['user_id', 'book_id', 'user_name', 'user_email', 'predicted_return_date'];
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class, 'user_id', 'id');

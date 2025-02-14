@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Models\BookRequest;
 use Illuminate\Support\Facades\DB;
-use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Carbon\Carbon;
 
@@ -11,8 +11,7 @@ use Carbon\Carbon;
 // CURRENTLY ONLY BOOK HAS BEEN SHOWN
 class RequestBookCard extends Component
 {
-    #[Locked]
-    public $requestBook;
+    public BookRequest $requestBook;
     public $returnDate = null;
 
     public function confirmReturnDate()
@@ -23,19 +22,20 @@ class RequestBookCard extends Component
         ]);
 
         DB::transaction(function () {
-            $this->requestBook->book()->update([
+            $request = BookRequest::query()->findOrFail($this->requestBook->id);
+            $request->book()->update([
                'is_available' => true,
             ]);
-            $user = $this->requestBook->user()->first();
+            $user = $request->user()->first();
             $user->books_request_count -= 1;
             $user->save();
-            $this->requestBook->return_date = Carbon::parse($this->returnDate);
-            $this->requestBook->save();
+            $request->return_date = Carbon::parse($this->returnDate);
+            $request->save();
         });
 
         $this->reset('returnDate');
         $this->requestBook->refresh();
-        $this->dispatch('book-returned', id: $this->requestBook->user_id); //If update books user listening can borrow(or other things if needed)
+        $this->dispatch('book-returned', id: $this->requestBook->user_id);
     }
 
 

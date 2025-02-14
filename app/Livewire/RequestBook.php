@@ -96,7 +96,7 @@ class RequestBook extends Component
     #[On('book-returned')]
     public function updateMaxBorrow($id) {
         if ($id == auth()->id()) {
-            //Same user, update it's max books to borrow
+            //if i's same user, update it's max books to borrow
             $user = User::query()->findOrFail($id);
             $this->maxToBorrow = self::LIMIT_TO_BORROW - $user->books_request_count;
         }
@@ -104,7 +104,6 @@ class RequestBook extends Component
 
     public function render()
     {
-//        dd(BookRequest::query()->where('user_id', auth()->id())->get()->toArray());
         if (empty($this->searchBookByName)) {
             $this->availableToBorrow = Book::query()
                 ->where('is_available', true)
@@ -126,8 +125,6 @@ class RequestBook extends Component
                 ->pluck('id')
                 ->contains($item['id']);
         });
-//        dd(auth()->user()->books_request_count);
-//        $this->maxToBorrow = $this->allowToBorrow(auth()->user()->books_request_count);
 
         return view('livewire.request-book');
     }
