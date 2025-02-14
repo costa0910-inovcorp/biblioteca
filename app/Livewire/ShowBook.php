@@ -27,7 +27,9 @@ class ShowBook extends Component
     public function render()
     {
         return view('livewire.show-book', [
-            'bookRequests' => $this->book->requests()->latest()->paginate(3),
+            'bookRequests' => $this->book->requests()
+                ->with(['user'])
+                ->latest()->paginate(3),
         ])->layout('layouts.app');
     }
 }

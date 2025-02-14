@@ -24,11 +24,13 @@
             <div class="mt-5 md:mt-0 md:col-span-2 px-4 sm:px-0">
                 <div class="flex flex-col gap-4">
                     @foreach($bookRequests as $request)
-                        <x-request-book-card :requestBook="$request" />
+                        <x-request-book-card :requestBook="$request" :showUser="true" />
                     @endforeach
                 </div>
 
-                {{ $bookRequests->links() }}
+                <div class="mt-4">
+                    {{ $bookRequests->links() }}
+                </div>
 
                 @if(count($bookRequests) == 0)
                 <p class="text-center">This book does not have any request yet</p>

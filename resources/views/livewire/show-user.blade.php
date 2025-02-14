@@ -22,7 +22,9 @@
                     @endforeach
                 </div>
 
-                {{ $userRequests->links() }}
+                <div class="mt-4">
+                    {{ $userRequests->links() }}
+                </div>
 
                 @if(count($userRequests) == 0)
                     <p class="text-center">This user does not made any request yet</p>

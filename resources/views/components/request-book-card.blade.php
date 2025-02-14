@@ -1,19 +1,29 @@
-@props(['requestBook'])
+@props(['requestBook', 'showUser' => false])
 
 @php
     use Carbon\Carbon;
 @endphp
 
 <div class="card card-side bg-base-100 shadow-xl card-compact card-bordered">
-    <figure>
-        <div class="avatar">
-            <div class="w-24 rounded">
-                <img src="{{ $requestBook->book?->cover_image }}" alt="{{ $requestBook->book?->name ?? 'No book' }}"/>
+    @if(!$showUser)
+        <figure>
+            <div class="avatar">
+                <div class="w-24 rounded">
+                    <img src="{{ $requestBook->book?->cover_image }}" alt="{{ $requestBook->book?->name ?? 'No book' }}"/>
+                </div>
             </div>
-        </div>
-    </figure>
+        </figure>
+    @endif
     <div class="card-body">
-        <h2 class="card-title">{{ $requestBook->book?->name?? 'no book' }}</h2>
+        <div class="card-title">
+            @if($showUser)
+                <h2>{{ $requestBook->user_name  }}</h2>
+                <span class="text-sm">{{ $requestBook->user_email }}</span>
+            @else
+                <strong>Title:</strong>
+                <h2>{{ $requestBook->book?->name?? 'no book' }}</h2>
+            @endif
+        </div>
         <p>
             <span><strong>Borrow on:</strong> {{ $requestBook->created_at }}</span>
             <span class="block"><strong>Predicted return date:</strong> {{ $requestBook->predicted_return_date }}</span>

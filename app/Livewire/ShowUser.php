@@ -28,7 +28,9 @@ class ShowUser extends Component
     public function render()
     {
         return view('livewire.show-user', [
-            'userRequests' => $this->user->requests()->latest()->paginate(3)
+            'userRequests' => $this->user->requests()
+                ->with(['book'])
+                ->latest()->paginate(3)
         ])->layout('layouts.app');
     }
 }
