@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Book;
+use App\Models\BookRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,14 +10,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AdminBookRequestNotification extends Mailable
+class UserReturnBookRemainderNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public array $data)
+    public function __construct(public BookRequest $requestDetails)
     {
         //
     }
@@ -28,7 +28,7 @@ class AdminBookRequestNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Admin Book Request Notification',
+            subject: 'Return Book Remainder',
         );
     }
 
@@ -38,7 +38,7 @@ class AdminBookRequestNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.admin-book-request-notification',
+            view: 'emails.return-book-remainder',
         );
     }
 
