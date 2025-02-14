@@ -24,7 +24,7 @@
             <div class="mt-5 md:mt-0 md:col-span-2 px-4 sm:px-0">
                 <div class="flex flex-col gap-4">
                     @foreach($bookRequests as $request)
-                        <livewire:request-book-card :requestBook="$request" />
+                        <x-request-book-card :requestBook="$request" />
                     @endforeach
                 </div>
 

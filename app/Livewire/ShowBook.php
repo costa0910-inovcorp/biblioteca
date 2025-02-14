@@ -2,14 +2,15 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Forms\ReturnRequestMethod;
 use App\Models\Book;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
 
 class ShowBook extends Component
 {
-    use WithoutUrlPagination;
+    use ReturnRequestMethod, WithPagination;
 
     public Book $book;
 
@@ -18,14 +19,10 @@ class ShowBook extends Component
         $this->book = $book;
     }
 
-    //TODO: THIS SUPPOSE TO LISTEN TO THIS CHILD EVENT WHEN BOOK RETURN,
-    // THEN REFRESH TO SHOW THAT THE BOOK IS AVAILABLE,
-    // BUT IS NOT WORKING AS INTENDED,
-    // SAME PROBLEM AS USER'S SHOWN POST ON REQUEST-BOOKS ENDPOINT
-//    #[On('book-returned')]
-//    public function returnBook() {
-//        $this->dispatch('refresh');
-//    }
+    #[On('book-returned')]
+    public function returnBook(): void {
+        $this->dispatch('refresh');
+    }
 
     public function render()
     {

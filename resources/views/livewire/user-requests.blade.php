@@ -7,7 +7,7 @@
         @endif
 
         @foreach($userRequests as $requestBook)
-            <livewire:request-book-card :requestBook="$requestBook" wire:key="$requestBook->id"  />
+            <x-request-book-card :requestBook="$requestBook" wire:key="$requestBook->id"  />
         @endforeach
 
         {{ $userRequests->links() }}
