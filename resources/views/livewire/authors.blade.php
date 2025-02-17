@@ -1,5 +1,5 @@
 <x-alpine-data>
-    <div class="p-4 flex gap-2 justify-between">
+    <div class="p-4 flex gap-2 justify-between max-sm:flex-col">
         <x-btn-link href="{{route('authors.create')}}">
             Create author
         </x-btn-link>

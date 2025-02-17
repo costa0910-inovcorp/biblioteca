@@ -36,7 +36,7 @@ class CreateBook extends Component
 
         //create require, update optional
         $this->validate([
-            'form.coverImage' => 'required|image|max:1024|mimes:jpg,jpeg,png'
+            'form.coverImage' => 'required|image|max:2048|mimes:jpg,jpeg,png'
         ]);
         $this->form->validateSelect($this->publishers, 'value', $this->form->publisherId);
         $this->form->validateMultipleSelect($this->authors, 'value', $this->form->authorsId);

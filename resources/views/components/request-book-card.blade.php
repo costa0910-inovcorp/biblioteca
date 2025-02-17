@@ -9,28 +9,28 @@
         <figure>
             <div class="avatar">
                 <div class="w-24 rounded">
-                    <img src="{{ $requestBook->book?->cover_image }}" alt="{{ $requestBook->book?->name ?? 'No book' }}"/>
+                    <img src="{{ asset($requestBook->book?->cover_image) }}" alt="{{ $requestBook->book?->name ?? 'No book' }}"/>
                 </div>
             </div>
         </figure>
     @endif
     <div class="card-body">
-        <div class="card-title">
+        <div class="max-sm:flex-col card-title">
             @if($showUser)
                 <h2>{{ $requestBook->user_name  }}</h2>
                 <span class="text-sm">{{ $requestBook->user_email }}</span>
             @else
-                <strong>Title:</strong>
+{{--                <strong>Title:</strong>--}}
                 <h2>{{ $requestBook->book?->name?? 'no book' }}</h2>
             @endif
         </div>
-        <p>
+        <p class="max-sm:flex max-sm:flex-col max-sm:items-center">
             <span><strong>Borrow on:</strong> {{ $requestBook->created_at }}</span>
             <span class="block"><strong>Predicted return date:</strong> {{ $requestBook->predicted_return_date }}</span>
         </p>
         <div class="card-actions justify-end">
             @if($requestBook->return_date)
-                <div class="badge flex-wrap">
+                <div class="badge flex-wrap h-fit">
                     Confirmed on {{ $requestBook->return_date }},
                     <strong class="ml-2">
                         @if (Carbon::parse($requestBook->return_date)->equalTo(Carbon::parse($requestBook->predicted_return_date)))

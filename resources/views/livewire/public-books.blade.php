@@ -1,12 +1,12 @@
-<div class="space-y-4  pb-8">
+<div class="space-y-4  pb-4">
 {{--    <div class="flex justify-center">--}}
 {{--        <x-search--}}
 {{--            :fields="[]"--}}
 {{--        />--}}
 {{--    </div>--}}
-    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8 justify-center">
+    <div class="flex flex-wrap sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8 justify-center">
         @foreach($books as $book)
-            <div class="card bg-base-100 w-72 shadow-xl">
+            <div class="card bg-base-100 flex-auto  w-72 shadow-xl">
                 <figure>
                     <img
                         src="{{ $book->cover_image }}"
@@ -29,7 +29,7 @@
             </div>
         @endforeach
     </div>
-    <div>
+    <div class="pt-4">
         {{ $books->links() }}
     </div>
 </div>

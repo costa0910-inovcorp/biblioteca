@@ -1,5 +1,5 @@
 <div>
-    <div class="p-4 flex gap-2 justify-between">
+    <div class="p-4 flex justify-center">
         <x-search
             selectModel="selectedField"
             :fields="$fields"

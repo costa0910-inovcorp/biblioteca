@@ -1,13 +1,14 @@
 <x-alpine-data>
-    <div class="p-4 flex gap-2 justify-between">
-        <x-btn-link href="{{route('books.create')}}">
+    <div class="p-4 grid md:grid-cols-3 gap-4 lg:grid-cols-8">
+        <x-btn-link href="{{ route('books.create')}}">
             Create book
         </x-btn-link>
-        <x-search
-            selectModel="selectedField"
-            :fields="$fields"
-        />
-        <x-btn-link href="{{route('books.export')}}">
+           <x-search
+               selectModel="selectedField"
+               class="flex flex-wrap lg:flex-row lg:col-span-6 lg:justify-center"
+               :fields="$fields"
+           />
+        <x-btn-link href="{{ route('books.export')}}">
             export books
         </x-btn-link>
     </div>

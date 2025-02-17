@@ -33,13 +33,13 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        $user->assignRole(RolesEnum::ADMIN);
+        $user->assignRole(RolesEnum::ADMIN, RolesEnum::CITIZEN);
 
         for ($i = 0; $i < 10; $i++) {
             $this->call(PublisherSeeder::class);
-            $this->call(BookSeeder::class);
+//            $this->call(BookSeeder::class);
             $this->call(AuthorSeeder::class);
-            $this->call(BookRequestSeeder::class);
+//            $this->call(BookRequestSeeder::class);
         }
     }
 
