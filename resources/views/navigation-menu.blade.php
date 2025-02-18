@@ -31,6 +31,9 @@
                         <x-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
                             {{ __('Authors') }}
                         </x-nav-link>
+                        <x-nav-link href="{{ route('search-google-books') }}" :active="request()->routeIs('search-google-books')">
+                            {{ __('Google books') }}
+                        </x-nav-link>
                     @endrole
 
 {{--                    both admin and user can access this route--}}
@@ -180,6 +183,10 @@
 
                 <x-responsive-nav-link href="{{ route('authors') }}" :active="request()->routeIs('authors')">
                     {{ __('Authors') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="{{ route('search-google-books') }}" :active="request()->routeIs('search-google-books')">
+                    {{ __('Google books') }}
                 </x-responsive-nav-link>
             @endrole
 

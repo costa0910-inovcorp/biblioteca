@@ -1,5 +1,6 @@
 <div class="space-y-4  pb-4">
 {{--    <div class="flex justify-center">--}}
+{{--        <livewire:search-box-with-filter queryTable="book" />--}}
 {{--        <x-search--}}
 {{--            :fields="[]"--}}
 {{--        />--}}

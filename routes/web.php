@@ -9,6 +9,7 @@ use App\Livewire\CreateAuthor;
 use App\Livewire\CreateBook;
 use App\Livewire\CreatePublisher;
 use App\Livewire\EditBook;
+use App\Livewire\SearchGoogleBooks;
 use App\Livewire\ShowBook;
 use App\Livewire\ShowUser;
 use App\Models\Book;
@@ -75,6 +76,9 @@ Route::middleware([
         return view('users');
     })->name('users');
     Route::get('/users/show/{user}', ShowUser::class)->name('users.show');
+
+    //search-google-books
+    Route::get('/search-google-books', SearchGoogleBooks::class)->name('search-google-books');
 });
 
 // request book
