@@ -12,14 +12,15 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->text('isbn');
+            $table->text('isbn')->nullable();
             $table->timestamps();
-            $table->string('name');
-            $table->text('bibliography');
-            $table->text('cover_image');
+            $table->text('name');
+            $table->text('bibliography')->nullable();
+            $table->text('cover_image')->nullable();
             $table->decimal('price');
             $table->boolean('is_available')->default(true);
-            $table->foreignUuid('publisher_id')->constrained('publishers', 'id')->cascadeOnDelete();
+            $table->foreignUuid('publisher_id')->nullable()
+                ->constrained('publishers', 'id')->nullOnDelete();
         });
     }
 

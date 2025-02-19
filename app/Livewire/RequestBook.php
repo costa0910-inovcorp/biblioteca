@@ -48,8 +48,7 @@ class RequestBook extends Component
                     'book_id' => $book['id'],
                     'user_id' => $authUser->id,
                     'user_name' => $authUser->name,
-                    'user_email' => $authUser->email,
-                    'predicted_return_date' => today()->addDay(),
+                    'user_email' => $authUser->email
                 ]);
 
                 Book::where('id', $book['id'])->update([

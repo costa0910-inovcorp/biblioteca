@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Events\SaveBooksToDB;
 use App\Repositories\SearchGoogleBooksRepository;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
@@ -10,14 +11,16 @@ use Livewire\Component;
 class SearchGoogleBooks extends Component
 {
 //    private SearchGoogleBooksRepository $searchGoogleBooks;
-    protected array $searchResult = [];
+    public array $searchResult = [];
 
     #[Url(as: 'q')]
     public string $search;
-    protected int $itemsPosition = 0;
+    public int $itemsPosition = 0;
     #[Validate('required|max:40|min:5')]
+    #[Url(as: 'ps')]
     public int $pageSize = 5;
 
+    public string $errorMessage = '';
     public bool $isActualPageBooksSaved = false;
 
     //TODO: RESET ITEM POSITION WHEN PAGE SIZE CHANGE(ON UPDATE HOOK)
@@ -36,49 +39,129 @@ class SearchGoogleBooks extends Component
 ////        dd($this->searchGoogleBooks);
 //    }
 
+    public function updating($property, $value): void
+    {
+        //Reset startIndex, return items from the start
+        if ($property === 'pageSize') {
+            if ($value >= 5 && $value <= 40) {
+                $this->pageSize = $value;
+                $this->itemsPosition = 0;
+            }
+        }
+    }
+
     public function searchBooks()
     {
         $this->itemsPosition = 0;
         $this->validate(['search' => 'required']);
         $this->fetchBooks();
-//        $this->itemPosition+= $this->pageSize;
+    }
+
+    public function getPage(int $page) {
+        $this->itemsPosition = $this->pageSize * ($page - 1);
+        $this->fetchBooks();
+    }
+
+    private function pageNumbers(): array {
+        //Add 1 because page count start on 0
+
+
+        if (empty($this->searchResult)) {
+            return [];
+        }
+
+        $page = $this->itemsPosition / $this->pageSize;
+        $total = $this->searchResult['totalItems'];
+
+        if ($page == 0) {
+//            dd($this->searchResult, $total, $this->itemsPosition, $this->pageSize, $page);
+            return [
+                'currentPage' => ++$page, //pages start on zero
+                'totalItems' => $total,
+                'prevPage' => null,
+                'nextPage' => ++$page,
+                'pageSize' => $this->pageSize,
+            ];
+        }
+
+        $prevNum = $page - 1;
+        $nextNum = $page + 1;
+        $maxItems = $this->itemsPosition * $nextNum;
+//        dd([
+//            'currentPage' => $page,
+//            'totalItems' => $total,
+//            'prevPage' => $prevNum,
+//            'nextPage' => $nextNum,
+//            'maxItems' => $maxItems,
+//            'm' => $total - $maxItems,
+//        ]);
+
+        if ($total - $maxItems <= 0 && abs($total - $maxItems) >= $this->pageSize) {
+            return [
+                'currentPage' => ++$page,
+                'totalItems' => $total,
+                'prevPage' => ++$prevNum,
+                'nextPage' => null,
+                'pageSize' => $this->pageSize,
+            ];
+        }
+
+        return [
+            'currentPage' => ++$page,
+            'totalItems' => $total,
+            'prevPage' => ++$prevNum,
+            'nextPage' => ++$nextNum,
+            'pageSize' => $this->pageSize,
+        ];
     }
 
     public function nextPage(): void
     {
-        if ($this->searchResult['totalItems'] > $this->itemsPosition + $this->pageSize) {
+        if ($this->search && ($this->searchResult['totalItems'] >= $this->itemsPosition + $this->pageSize)) {
             //TODO: FETCH NEXT PAGE
-            $this->fetchBooks();
             $this->itemsPosition += $this->pageSize;
+            $this->fetchBooks();
         }
     }
 
     public function previousPage(): void
     {
-        if ($this->itemsPosition - $this->pageSize >= 0) {
+        if ($this->search && ($this->itemsPosition - $this->pageSize >= 0)) {
             //TODO: GO BACK TO PREV PAGE
-            $this->fetchBooks();
             $this->itemsPosition -= $this->pageSize;
+            $this->fetchBooks();
         }
     }
 
     public function saveBooks(): void {
+        //TODO: Do something before dispatch event to save books
+        SaveBooksToDB::dispatch($this->searchResult['items']);
+//        $this->isActualPageBooksSaved = true;
+    }
 
-
-        $this->isActualPageBooksSaved = true;
+    public function tryAgain(): void
+    {
+        $this->fetchBooks(); //Keep prev state, query,items to return...
     }
 
     protected function fetchBooks(): void
     {
         $searchGoogleBooks = app(SearchGoogleBooksRepository::class);
-        $this->searchResult = $searchGoogleBooks->searchFromGoogleBooks($this->search, $this->itemsPosition, $this->pageSize);
-        $this->isActualPageBooksSaved = false;
+        $result = $searchGoogleBooks->searchFromGoogleBooks($this->search, $this->itemsPosition, $this->pageSize);
+        if ($result['isSuccess']) {
+            $this->searchResult = $result['books'];
+            $this->errorMessage = '';
+        } else {
+            $this->searchResult = [];
+            $this->errorMessage = $result['message'];
+        }
     }
 
     public function render()
     {
         return view('livewire.search-google-books', [
-            'books' => $this->searchResult['items'],
+            'books' => empty($this->searchResult) ? [] : $this->searchResult['items'],
+            'pages' => $this->pageNumbers(),
         ])->layout('layouts.app');
     }
 }

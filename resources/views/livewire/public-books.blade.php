@@ -29,6 +29,10 @@
                 </div>
             </div>
         @endforeach
+
+        @if(count($books) == 0)
+            <p class="text-center">No books found</p>
+        @endif
     </div>
     <div class="pt-4">
         {{ $books->links() }}

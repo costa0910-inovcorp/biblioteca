@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('publishers', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->timestamps();
-            $table->string('name');
-            $table->text('logo');
+            $table->text('name');
+            $table->text('logo')->nullable();
         });
     }
 
