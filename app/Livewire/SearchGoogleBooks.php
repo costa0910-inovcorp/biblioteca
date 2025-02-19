@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Events\SaveBooksToDB;
 use App\Repositories\SearchGoogleBooksRepository;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -21,7 +22,7 @@ class SearchGoogleBooks extends Component
     public int $pageSize = 5;
 
     public string $errorMessage = '';
-    public bool $isActualPageBooksSaved = false;
+//    public bool $isActualPageBooksSaved = false;
 
     //TODO: RESET ITEM POSITION WHEN PAGE SIZE CHANGE(ON UPDATE HOOK)
     //TODO: UPDATE $isActualPageBooksSaved TO BE ARRAY SO CAN ADD PAGE NUMBER THAT'S ALREADY SAVED
@@ -135,7 +136,14 @@ class SearchGoogleBooks extends Component
 
     public function saveBooks(): void {
         //TODO: Do something before dispatch event to save books
-        SaveBooksToDB::dispatch($this->searchResult['items']);
+        $userId = auth()->id();
+        $newProcessId = Str::uuid()->toString();
+        SaveBooksToDB::dispatch($userId, $this->searchResult['items'], $newProcessId);
+        $this->dispatch('save-books-to-db-start', data: [
+            'status' => 'START',
+            'totalBooks' => count($this->searchResult['items']),
+            'id' => $newProcessId,
+        ]);
 //        $this->isActualPageBooksSaved = true;
     }
 

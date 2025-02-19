@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Book;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -9,15 +10,16 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class SaveBooksToDB
+class SavingBooksStatus
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public int $userId, public array $books, public string $processId)
+    public function __construct(public array $data)
     {
         //
     }
@@ -29,8 +31,9 @@ class SaveBooksToDB
      */
     public function broadcastOn(): array
     {
+        Log::info('called: broadcastOn');
         return [
-            new PrivateChannel('channel-name'),
+            new Channel('saving-books'),
         ];
     }
 }

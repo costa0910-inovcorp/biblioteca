@@ -1,6 +1,6 @@
 <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
-        <div class="flex justify-between gap-4 flex-wrap bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-4">
+        <div class="flex justify-between gap-4 flex-wrap bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg p-4">
                 <div class="join">
                     <div>
                         <div>
@@ -24,11 +24,14 @@
                         <button class="btn join-item" wire:click="searchBooks">Search</button>
                     </div>
                 </div>
-            @if(!empty($books) && empty($errorMessage))
-                <div>
-                    <button class="btn btn-primary" wire:click="saveBooks">Save books</button>
+                <div class="flex gap-4">
+                    <livewire:saving-books-status />
+                    @if(!empty($books) && empty($errorMessage))
+                        <div>
+                            <button class="btn btn-primary" wire:click="saveBooks">Save books</button>
+                        </div>
+                    @endif
                 </div>
-            @endif
         </div>
 
 {{--        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-4">--}}

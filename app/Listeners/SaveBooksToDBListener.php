@@ -3,14 +3,15 @@
 namespace App\Listeners;
 
 use App\Events\SaveBooksToDB;
+use App\Events\SavingBooksStatus;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Publisher;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Livewire\Livewire;
 
 class SaveBooksToDBListener implements ShouldQueue
 {
@@ -27,10 +28,13 @@ class SaveBooksToDBListener implements ShouldQueue
      */
     public function handle(SaveBooksToDB $event): void
     {
+        $booksSaved = 0;
+        $books = $event->books;
+        $processId = $event->processId;
+        $userId = $event->userId;
+
         try {
             DB::beginTransaction();
-
-            $books = $event->books;
 
             //loop through book
             foreach ($books as $book) {
@@ -47,6 +51,7 @@ class SaveBooksToDBListener implements ShouldQueue
                     foreach ($authors as $author) {
                         $dbBook->authors()->attach($author);
                     }
+                    $booksSaved++;
                 }
             }
 
@@ -54,12 +59,43 @@ class SaveBooksToDBListener implements ShouldQueue
 
         } catch (\Exception $e) {
             //TODO: ROLLBACK AND EMIT ERROR EVENT
+            Log::info('called: error');
             DB::rollBack();
+            SavingBooksStatus::dispatch([
+                'booksSaved' => $booksSaved,
+                'totalBooks' => count($books),
+                'id' => $processId,
+                'status' => 'ERROR',
+                'message' => $e->getMessage(),
+            ]);
+//            broadcast(new SavingBooksStatus([
+//                'booksSaved' => $booksSaved,
+//                'totalBooks' => count($books),
+//                'id' => $processId,
+//                'status' => 'ERROR',
+//                'message' => $e->getMessage(),
+//            ]));
         }
 
         //TODO: EMIT SUCCESS EVENT
         //dispatch event that's books saved on db
 //        Livewire::dispatch('booksSaved', $books['itemsIdentifier']);
+        SavingBooksStatus::dispatch([
+            'status' => 'SAVED',
+            'booksSaved' => $booksSaved,
+            'totalBooks' => count($books),
+            'id' => $processId,
+        ]);
+
+        Log::info('called: success');
+
+//        broadcast(new SavingBooksStatus([
+//            'status' => 'SAVED',
+//            'booksSaved' => $booksSaved,
+//            'totalBooks' => count($books),
+//            'id' => $processId,
+//        ]));
+
     }
 
     private function findOrCreatePublisher(?string $name = null): Publisher | null {
