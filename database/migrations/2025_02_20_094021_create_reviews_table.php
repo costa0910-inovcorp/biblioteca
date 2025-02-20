@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('status')->default(ReviewEnum::PENDING);
             $table->float('rating')->default(1);
             $table->text('comment')->nullable();
+            $table->text('rejection_comment')->nullable();
             $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
             $table->foreignUuid('book_id')->constrained('books', 'id')->cascadeOnDelete();
         });
