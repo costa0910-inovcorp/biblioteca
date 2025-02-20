@@ -20,9 +20,6 @@
                         <x-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                             {{ __('Users') }}
                         </x-nav-link>
-                        <x-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
-                            {{ __('Books') }}
-                        </x-nav-link>
 
                         <x-nav-link href="{{ route('publishers') }}" :active="request()->routeIs('publishers')">
                             {{ __('Publishers') }}
@@ -37,6 +34,12 @@
                     @endrole
 
 {{--                    both admin and user can access this route--}}
+                    @can('view books')
+                        <x-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
+                            {{ __('Books') }}
+                        </x-nav-link>
+                    @endcan
+
                     @can('request books')
                         <x-nav-link href="{{ route('request-books') }}" :active="request()->routeIs('request-books')">
                             {{ __('Request books') }}
@@ -173,9 +176,6 @@
                 <x-responsive-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                     {{ __('Users') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
-                    {{ __('Books') }}
-                </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ route('publishers') }}" :active="request()->routeIs('publishers')">
                     {{ __('Publishers') }}
@@ -190,6 +190,11 @@
                 </x-responsive-nav-link>
             @endrole
 
+            @can('view books')
+                <x-responsive-nav-link href="{{ route('books') }}" :active="request()->routeIs('books')">
+                    {{ __('Books') }}
+                </x-responsive-nav-link>
+            @endcan
             @can('request books')
 
                 <x-responsive-nav-link href="{{ route('request-books') }}" :active="request()->routeIs('request-books')">

@@ -1,16 +1,20 @@
 <x-alpine-data>
     <div class="p-4 grid md:grid-cols-3 gap-4 lg:grid-cols-8">
-        <x-btn-link href="{{ route('books.create')}}">
-            Create book
-        </x-btn-link>
+        @can('manage books')
+            <x-btn-link href="{{ route('books.create')}}">
+                Create book
+            </x-btn-link>
+        @endcan
            <x-search
                selectModel="selectedField"
                class="flex flex-wrap lg:flex-row lg:col-span-6 lg:justify-center"
                :fields="$fields"
            />
-        <x-btn-link href="{{ route('books.export')}}">
-            export books
-        </x-btn-link>
+        @can('manage books')
+            <x-btn-link href="{{ route('books.export')}}">
+                export books
+            </x-btn-link>
+        @endcan
     </div>
     <x-table :alpineData="$books->toArray()['data']">
         <thead>
@@ -59,11 +63,13 @@
                             </svg>
                         </div>
                         <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[100] w-52 p-2 shadow">
-                            <li><a x-bind:href="window.location.origin + '/books/edit/' + book.id">Edit</a></li>
+                            @can('manage books')
+                                <li><a x-bind:href="window.location.origin + '/books/edit/' + book.id">Edit</a></li>
+                                <li>
+                                    <button @click="toggleModal(book.id)">delete</button>
+                                </li>
+                            @endcan
                             <li><a x-bind:href="window.location.origin + '/books/show/' + book.id">Details</a></li>
-                            <li>
-                                <button @click="toggleModal(book.id)">delete</button>
-                            </li>
                         </ul>
                     </div>
                 </th>

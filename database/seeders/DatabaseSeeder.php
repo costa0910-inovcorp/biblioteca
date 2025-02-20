@@ -18,13 +18,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $citizenPermissions = ['request books'];
-
-        $adminPermissions = ['manage books', 'view all requests', 'confirm reception'];
-        $allPermissions = array_merge($adminPermissions, $citizenPermissions);
+        $citizenPermissions = ['request books', 'view books', 'review books'];
+        $adminPermissions = ['request books', 'view books', 'manage books', 'view all requests', 'confirm reception', 'manage authors', 'manage publishers'];
+        $allPermissions = array_unique(array_merge($citizenPermissions, $adminPermissions));
 
         $this->CreatePermissions($allPermissions);
-        $this->CreateRolesWithPermissions(RolesEnum::ADMIN, $allPermissions);
+        $this->CreateRolesWithPermissions(RolesEnum::ADMIN, $adminPermissions);
         $this->CreateRolesWithPermissions(RolesEnum::CITIZEN, $citizenPermissions);
 
         $user = User::create([
@@ -34,13 +33,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $user->assignRole(RolesEnum::ADMIN); // removed citizen so can restrict review to only citizen
-
-        for ($i = 0; $i < 10; $i++) {
-            $this->call(PublisherSeeder::class);
+//
+//        for ($i = 0; $i < 10; $i++) {
+//            $this->call(PublisherSeeder::class);
 //            $this->call(BookSeeder::class);
-            $this->call(AuthorSeeder::class);
+//            $this->call(AuthorSeeder::class);
 //            $this->call(BookRequestSeeder::class);
-        }
+//        }
     }
 
     protected function CreatePermissions(array $permissions): void

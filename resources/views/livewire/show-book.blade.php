@@ -33,7 +33,7 @@
                 </div>
 
                 @if(count($bookRequests) == 0)
-                <p class="text-center">This book does not have any request yet</p>
+                    <p class="text-center">This book does not have any request yet</p>
                 @endif
             </div>
         </div>

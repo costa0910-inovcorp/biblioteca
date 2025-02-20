@@ -29,9 +29,9 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', function () {
         if (request()->user()->hasRole(RolesEnum::ADMIN)) {
-            return redirect()->route('books');
+            return redirect()->route('users');
         }
-        return redirect()->route('request-books');
+        return redirect()->route('books');
         });
     });
 
@@ -41,12 +41,8 @@ Route::middleware([
     'verified',
     'role:admin'
 ])->group(function () {
-    Route::get('/books', function () {
-        return view('books');
-    })->name('books');
     Route::get('/books/create', CreateBook::class)->name('books.create');
     Route::get('/books/edit/{book}', EditBook::class)->name('books.edit');
-    Route::get('/books/show/{book}', ShowBook::class)->name('books.show');
     Route::get('/books/export', function () {
         return Excel::download(new BooksExport(), 'livros.xlsx');
     })->name('books.export');
@@ -86,8 +82,14 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-    'can:request books'
+    'can:request books',
+    'can:view books'
 ])->group(function () {
+    Route::get('/books', function () {
+        return view('books');
+    })->name('books');
+    Route::get('/books/show/{book}', ShowBook::class)->name('books.show');
+
     Route::get('/request-books', function () {
         return view('request-books');
     })->name('request-books');

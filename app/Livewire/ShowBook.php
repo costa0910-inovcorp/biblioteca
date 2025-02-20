@@ -27,9 +27,16 @@ class ShowBook extends Component
     public function render()
     {
         return view('livewire.show-book', [
-            'bookRequests' => $this->book->requests()
-                ->with(['user'])
-                ->latest()->paginate(3),
+            'bookRequests' => $this->getRequestsBaseOnPermission(),
         ])->layout('layouts.app');
+    }
+    protected function getRequestsBaseOnPermission() {
+        if (auth()->user()->can('view all requests')) {
+            return $this->book->requests()->with(['user'])->latest()->paginate(3);
+        } else {
+            return $this->book->requests()
+                ->where('user_id', auth()->id())
+                ->with(['user'])->latest()->paginate(3);
+        }
     }
 }

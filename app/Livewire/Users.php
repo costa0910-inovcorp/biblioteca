@@ -27,12 +27,14 @@ class Users extends Component
     public function add(User $user): void
     {
         $user->assignRole(RolesEnum::ADMIN);
+        $user->removeRole(RolesEnum::CITIZEN);
         $user->save();
         $this->dispatch('refresh');
     }
 
     public function remove(User $user): void
     {
+        $user->assignRole(RolesEnum::CITIZEN);
         $user->removeRole(RolesEnum::ADMIN);
         $user->save();
         $this->dispatch('refresh');
