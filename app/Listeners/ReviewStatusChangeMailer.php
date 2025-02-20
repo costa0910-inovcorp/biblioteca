@@ -3,8 +3,10 @@
 namespace App\Listeners;
 
 use App\Events\ReviewStatusChange;
+use App\Mail\ReviewStatusChangeEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
 class ReviewStatusChangeMailer
 {
@@ -21,9 +23,8 @@ class ReviewStatusChangeMailer
      */
     public function handle(ReviewStatusChange $event): void
     {
-        //TODO 1: GET REVIEW
         $review = $event->review;
 
-        //TODO: SEND USER EMAIL
+        Mail::to($review->user->email)->send(New ReviewStatusChangeEmail($review));
     }
 }

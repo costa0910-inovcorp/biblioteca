@@ -2,9 +2,14 @@
 
 namespace App\Listeners;
 
+use App\Enums\RolesEnum;
 use App\Events\ReviewSubmitted;
+use App\Mail\ReviewSubmittedEmail;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ReviewSubmittedMailer
 {
@@ -21,13 +26,14 @@ class ReviewSubmittedMailer
      */
     public function handle(ReviewSubmitted $event): void
     {
-        //TODO 1: GET SUBMITTED REVIEW
         $review = $event->review;
 
-        //TODO 2: GET ALL ADMINS
+        $admins = User::role(RolesEnum::ADMIN)->get();
 
-        //TODO 3: LOOP THROUGH ADMINS AND SEND EMAIL
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->send(new ReviewSubmittedEmail($review));
+        }
 
-        //TODO 4: LOG ALL EMAIL SENT TO ADMIN ABOUT SUBMITTED REVIEW
+        Log::info('ReviewSubmitted: all emails sent to: ' . count($admins) . ' admin(s)');
     }
 }

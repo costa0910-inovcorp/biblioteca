@@ -62,7 +62,7 @@ class SaveBooksToDBListener implements ShouldQueue
             Log::info('called: error');
             DB::rollBack();
             SavingBooksStatus::dispatch([
-                'booksSaved' => $booksSaved,
+                'booksSaved' => 0,
                 'totalBooks' => count($books),
                 'id' => $processId,
                 'status' => 'ERROR',
