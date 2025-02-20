@@ -14,6 +14,7 @@ use App\Livewire\ShowBook;
 use App\Livewire\ShowUser;
 use App\Models\Book;
 use App\Models\BookRequest;
+use App\Models\Review;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
@@ -75,6 +76,14 @@ Route::middleware([
 
     //search-google-books
     Route::get('/search-google-books', SearchGoogleBooks::class)->name('search-google-books');
+
+    //Reviews
+    Route::get('/reviews', function () {
+        return view('reviews');
+    })->name('reviews');
+    Route::get('/reviews/{id}', function(Review $review) {
+        dd($review);
+    })->name('reviews.show');
 });
 
 // request book

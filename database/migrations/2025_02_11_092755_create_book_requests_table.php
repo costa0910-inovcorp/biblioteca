@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
             $table->date('predicted_return_date')->default(today()->addDays(5));
             $table->date('return_date')->nullable();
+            $table->boolean('is_reviewed')->default(false);
             $table->string('user_name');
             $table->string('user_email');
         });

@@ -7,5 +7,5 @@
         <strong>{{ $review->user->name }}</strong> ({{ $review->user->email }}) has submit review on
         <strong>{{ $review->book->name }}</strong>.</p>
 
-    <p style="color: #555; font-size: 16px;">Review details <a href="{{ route('reviews', ['reviewId' => $review->id] ) }}" target="_blank">here</a></p>
+    <p style="color: #555; font-size: 16px;">Review details <a href="{{ route('reviews.show', ['id' => $review->id] ) }}" target="_blank">here</a></p>
 </x-emails-template>

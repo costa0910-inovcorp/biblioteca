@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Review extends Model
 {
+    public $incrementing = false;
     protected $fillable = [
         'id',
         'book_id',

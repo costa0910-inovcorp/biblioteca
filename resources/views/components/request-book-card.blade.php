@@ -20,7 +20,6 @@
                 <h2>{{ $requestBook->user_name  }}</h2>
                 <span class="text-sm">{{ $requestBook->user_email }}</span>
             @else
-{{--                <strong>Title:</strong>--}}
                 <h2>{{ $requestBook->book?->name?? 'no book' }}</h2>
             @endif
         </div>
@@ -42,9 +41,36 @@
                         @endif
                     </strong>
                 </div>
-                @can(auth()->user()->hasRole('citizen'))
-                    @if($requestBook->user_id == auth()->id())
-                        <button  class="btn btn-xs btn-primary">Review</button>
+                @can('review books')
+                    @if(!$requestBook->is_reviewed && $requestBook->user_id == auth()->id())
+                        <button onclick="book_review_{{ $requestBook->id }}.showModal()" class="btn btn-xs btn-primary">Review</button>
+                        <dialog id="book_review_{{ $requestBook->id }}" class="modal"  wire:ignore.self>
+                            <div class="modal-box">
+                                <h3 class="text-lg font-bold">What was your experience with this book?</h3>
+                                <div class="mt-2">
+                                    <input type="range" min="1" max="5" wire:model="rating" class="range" step="0.5" />
+                                    <div class="flex w-full justify-between px-2 text-xs">
+                                        <span>1</span>
+                                        <span>2</span>
+                                        <span>3</span>
+                                        <span>4</span>
+                                        <span>5</span>
+                                    </div>
+                                    <x-input-error for="rating" class="mt-1" />
+                                </div>
+                                <div class="mt-4">
+                                    <textarea class="textarea textarea-bordered w-full" wire:model="comment" placeholder="Your experience"></textarea>
+                                    <x-input-error for="comment" class="mt-1" />
+                                </div>
+                                <div class="modal-action space-x-4">
+                                    <form method="dialog">
+                                        <!-- if there is a button in form, it will close the modal -->
+                                        <button class="btn">Close</button>
+                                    </form>
+                                    <button type="button" class="btn btn-primary" wire:click="reviewBook({{ $requestBook->id }})">Submit review</button>
+                                </div>
+                            </div>
+                        </dialog>
                     @endif
                 @endcan
             @else

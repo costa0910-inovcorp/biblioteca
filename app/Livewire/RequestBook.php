@@ -56,7 +56,7 @@ class RequestBook extends Component
                 ]);
 
                 //TODO: emit event, that's request has been made
-                BookRequested::dispatch($request);
+//                BookRequested::dispatch($request); On 80% in emails test
             }
 
             $user = User::query()->where('id', $authUser->id)->first();
