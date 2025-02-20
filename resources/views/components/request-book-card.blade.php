@@ -42,6 +42,11 @@
                         @endif
                     </strong>
                 </div>
+                @can(auth()->user()->hasRole('citizen'))
+                    @if($requestBook->user_id == auth()->id())
+                        <button  class="btn btn-xs btn-primary">Review</button>
+                    @endif
+                @endcan
             @else
                 <div class="badge badge-warning">No confirmation yet</div>
                 @can('manage books')

@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        $user->assignRole(RolesEnum::ADMIN, RolesEnum::CITIZEN);
+        $user->assignRole(RolesEnum::ADMIN); // removed citizen so can restrict review to only citizen
 
         for ($i = 0; $i < 10; $i++) {
             $this->call(PublisherSeeder::class);
