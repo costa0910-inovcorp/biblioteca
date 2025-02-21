@@ -6,6 +6,7 @@ use App\Events\BookRequested;
 use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\User;
+use App\Repositories\RequestBookRepository;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -25,7 +26,7 @@ class RequestBook extends Component
         $this->maxToBorrow = self::LIMIT_TO_BORROW - auth()->user()->books_request_count;
     }
 
-    public function borrow(): void {
+    public function borrow(RequestBookRepository $repository): void {
         $this->validate(rules: [
             'booksToBorrow' => "required|array|min:1|max:$this->maxToBorrow",
         ], messages: [
@@ -36,36 +37,8 @@ class RequestBook extends Component
                 "You are not allowed to borrow books.",
         ]);
 
-        $authUser = auth()->user();
-        if ($authUser->books_request_count >= self::LIMIT_TO_BORROW) {
-            abort(403, 'You can not request more than 3 books at the same time.');
-        }
+        $this->maxToBorrow = $repository->borrowBooks($this->booksToBorrow);
 
-        DB::transaction(function() use ($authUser) {
-            foreach ($this->booksToBorrow as $book) {
-                //TODO: ask Nuno if to let user choose return date and if to emit only one event
-                $request = BookRequest::create([
-                    'book_id' => $book['id'],
-                    'user_id' => $authUser->id,
-                    'user_name' => $authUser->name,
-                    'user_email' => $authUser->email
-                ]);
-
-                Book::where('id', $book['id'])->update([
-                    'is_available' => false,
-                ]);
-
-                //TODO: emit event, that's request has been made
-//                BookRequested::dispatch($request); On 80% in emails test
-            }
-
-            $user = User::query()->where('id', $authUser->id)->first();
-            $user->books_request_count += count($this->booksToBorrow);
-            $user->save();
-
-
-            $this->maxToBorrow = self::LIMIT_TO_BORROW - $user->books_request_count;
-        });
         $this->reset('searchBookByName', 'booksToBorrow');
         $this->dispatch('books-borrowed');
     }

@@ -16,6 +16,7 @@ use App\Livewire\ShowUser;
 use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\Review;
+use App\Repositories\RequestBookRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
@@ -102,31 +103,12 @@ Route::middleware([
         return view('request-books');
     })->name('request-books');
 
-    Route::get('/public-books-request/{book}', function (Book $book) {
+    Route::get('/public-books-request/{book}', function (Book $book, RequestBookRepository $repository) {
         if (!$book->exists || !$book->is_available) {
             abort(404, 'Book not found or is not available.');
         }
 
-        $user = auth()->user();
-        if ($user->books_request_count >= 3) {
-            abort(403, 'You can not request more than 3 books at the same time.');
-        }
-
-        DB::transaction(function () use ($book, $user) {
-            $requestBook = BookRequest::create([
-                'user_id' => $user->id,
-                'user_name' => $user->name,
-                'user_email' => $user->email,
-                'book_id' => $book->id,
-            ]);
-
-            $user->books_request_count += 1;
-            $user->save();
-            $book->is_available = false;
-            $book->save();
-
-            BookRequested::dispatch($requestBook);
-        });
+        $repository->borrowBooks([$book]);
 
         return redirect()->route('request-books');
     })->name('public.books.request');

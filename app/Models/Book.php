@@ -43,6 +43,11 @@ class Book extends Model
         return $this->hasMany(Review::class, 'book_id', 'id');
     }
 
+    public function bookWaitList(): HasMany
+    {
+        return $this->hasMany(BookWaitList::class, 'book_id', 'id');
+    }
+
     protected function casts(): array
     {
         return [

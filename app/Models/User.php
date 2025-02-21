@@ -63,6 +63,10 @@ class User extends Authenticatable
         return $this->hasMany(Review::class, 'user_id', 'id');
     }
 
+    public function bookWaitList(): HasMany {
+        return $this->hasMany(BookWaitList::class, 'user_id', 'id');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
