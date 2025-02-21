@@ -49,7 +49,7 @@ trait ReturnRequestMethod
             ->findOrFail($requestId);
 
         if ($request->is_reviewed) {
-            abort(402, 'Sorry, this book is already reviewed.');
+            abort(400, 'Sorry, this book is already reviewed.');
         }
 
         DB::transaction(function () use ($request) {

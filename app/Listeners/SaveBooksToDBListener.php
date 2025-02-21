@@ -12,6 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use function Pest\Laravel\get;
 
 class SaveBooksToDBListener implements ShouldQueue
 {
@@ -36,38 +37,43 @@ class SaveBooksToDBListener implements ShouldQueue
         try {
             DB::beginTransaction();
 
-            //loop through book
             foreach ($books as $book) {
+
+                $isAlreadySaved = Book::query()
+                    ->where('isbn', $book['isbn'])
+                    ->orWhere('name', $book['name'])->get();
+                if (!$isAlreadySaved->isEmpty()) {
+                    Log::info('Book already saved:', $isAlreadySaved->toArray());
+                    continue;
+                }
                 // find or create publisher
                 $publisher = $this->findOrCreatePublisher($book['publisher']);
                 //find or create author
                 $authors = $this->findOrCreateAuthors($book['authors']);
 
-                //create/find book
-                $result = $this->findOrCreateBook($book, $publisher?->id);
-
-                if ($result['justCreated']) {
-                    $dbBook = $result['book'];
-                    foreach ($authors as $author) {
-                        $dbBook->authors()->attach($author);
-                    }
-                    $booksSaved++;
+                //create
+                $dbBook = $this->CreateBook($book, $publisher?->id);
+                foreach ($authors as $author) {
+                    $dbBook->authors()->attach($author);
                 }
+
+                $booksSaved++;
             }
 
             Db::commit();
 
         } catch (\Exception $e) {
             //TODO: ROLLBACK AND EMIT ERROR EVENT
-            Log::info('called: error');
+            Log::error('called: error', (array)$e);
             DB::rollBack();
-            SavingBooksStatus::dispatch([
-                'booksSaved' => 0,
-                'totalBooks' => count($books),
-                'id' => $processId,
-                'status' => 'ERROR',
-                'message' => $e->getMessage(),
-            ]);
+            return;
+//            SavingBooksStatus::dispatch([
+//                'booksSaved' => 0,
+//                'totalBooks' => count($books),
+//                'id' => $processId,
+//                'status' => 'ERROR',
+//                'message' => $e->getMessage(),
+//            ]);
 //            broadcast(new SavingBooksStatus([
 //                'booksSaved' => $booksSaved,
 //                'totalBooks' => count($books),
@@ -80,14 +86,14 @@ class SaveBooksToDBListener implements ShouldQueue
         //TODO: EMIT SUCCESS EVENT
         //dispatch event that's books saved on db
 //        Livewire::dispatch('booksSaved', $books['itemsIdentifier']);
-        SavingBooksStatus::dispatch([
-            'status' => 'SAVED',
-            'booksSaved' => $booksSaved,
-            'totalBooks' => count($books),
-            'id' => $processId,
-        ]);
+//        SavingBooksStatus::dispatch([
+//            'status' => 'SAVED',
+//            'booksSaved' => $booksSaved,
+//            'totalBooks' => count($books),
+//            'id' => $processId,
+//        ]);
 
-        Log::info('called: success');
+        Log::info($booksSaved . ' books saved to db successfully');
 
 //        broadcast(new SavingBooksStatus([
 //            'status' => 'SAVED',
@@ -127,19 +133,9 @@ class SaveBooksToDBListener implements ShouldQueue
         return $dbAuthors;
     }
 
-    private function findOrCreateBook(array $book, ?string $publisherId = null): array
+    private function CreateBook(array $book, ?string $publisherId): Book
     {
-        $dbBook =  Book::query()->where('isbn', $book['isbn'])->first();
-        if ($dbBook?->exists) {
-            return ['book' => $dbBook, 'justCreated' => false];
-        }
-
-        $dbBook = Book::query()->where('name', $book['name'])->first();
-        if ($dbBook?->exists && !$book['isbn']) {
-            return ['book' => $dbBook, 'justCreated' => false];
-        }
-
-        $dbBook =  Book::query()->create([
+        return Book::query()->create([
             'id' => Str::uuid(),
             'name' => $book['name'],
             'bibliography' => $book['bibliography'],
@@ -148,7 +144,5 @@ class SaveBooksToDBListener implements ShouldQueue
             'publisher_id' => $publisherId,
             'cover_image' => $book['cover_image'],
         ]);
-
-        return ['book' => $dbBook, 'justCreated' => true];
     }
 }

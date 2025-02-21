@@ -1,6 +1,6 @@
 <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:grid md:grid-cols-2 md:gap-6">
             <div class="md:col-span-1 flex justify-between">
                 <div class="px-4 sm:px-0">
                         <img src="{{ asset($book->cover_image) }}" alt="{{ $book->name }}" class="rounded-full size-20 object-cover">
@@ -21,7 +21,7 @@
                 </div>
 
             </div>
-            <div class="mt-5 md:mt-0 md:col-span-2 px-4 sm:px-0">
+            <div class="mt-5 md:mt-0 px-4 sm:px-0">
                 <div class="flex flex-col gap-4">
                     @foreach($bookRequests as $request)
                         <x-request-book-card :requestBook="$request" :showUser="true" />
@@ -37,5 +37,10 @@
                 @endif
             </div>
         </div>
+        <x-section-border />
+       <div class="w-full px-4 sm:px-0 mt-5 gap-4 md:grid grid-cols-2">
+           <livewire:show-user-reviews bookId="{{ $book->id }}"/>
+           <x-relevant-books :books="$relevantBooks"/>
+       </div>
     </div>
 </div>

@@ -16,7 +16,7 @@
                 </figure>
                 <div class="card-body">
                     <h2 class="card-title">
-                       {{ $book->name }}
+                       {{ \Illuminate\Support\Str::words($book->name, 5) }}
                     </h2>
                     <p>{{ \Illuminate\Support\Str::words($book->bibliography, 10) }}</p>
                     <div class="card-actions justify-end">

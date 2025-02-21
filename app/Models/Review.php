@@ -15,6 +15,7 @@ class Review extends Model
         'status',
         'rating',
         'comment',
+        'rejection_comment'
     ];
 
     public function book(): BelongsTo {

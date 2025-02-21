@@ -11,6 +11,7 @@ use App\Livewire\CreatePublisher;
 use App\Livewire\EditBook;
 use App\Livewire\SearchGoogleBooks;
 use App\Livewire\ShowBook;
+use App\Livewire\ShowReview;
 use App\Livewire\ShowUser;
 use App\Models\Book;
 use App\Models\BookRequest;
@@ -81,9 +82,7 @@ Route::middleware([
     Route::get('/reviews', function () {
         return view('reviews');
     })->name('reviews');
-    Route::get('/reviews/{id}', function(Review $review) {
-        dd($review);
-    })->name('reviews.show');
+    Route::get('/reviews/{id}', ShowReview::class)->name('reviews.show');
 });
 
 // request book

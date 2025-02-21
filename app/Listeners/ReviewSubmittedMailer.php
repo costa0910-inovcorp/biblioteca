@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class ReviewSubmittedMailer
+class ReviewSubmittedMailer implements ShouldQueue
 {
     /**
      * Create the event listener.
