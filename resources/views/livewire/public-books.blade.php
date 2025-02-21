@@ -24,6 +24,7 @@
                             <a class="btn btn-primary btn-xs" href="{{ route('public.books.request', ['book' => $book->id]) }}">Borrow</a>
                         @else
                             <div class="badge badge-outline">Not available</div>
+                            <a class="btn btn-warning btn-xs" href="{{ route('public.add-to-wait-list', ['book' => $book->id]) }}">Add to wait list</a>
                         @endif
                     </div>
                 </div>

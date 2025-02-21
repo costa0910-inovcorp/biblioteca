@@ -28,9 +28,9 @@
             <tr :key="publisher.id">
                 <x-table.td-with-image>
                     <x-slot:img>
-                        <img x-bind:src="window.location.origin + '/' + publisher.logo" x-bind:alt="publisher.name" />
+                        <img x-bind:src="publisher.logo?.includes('http')? publisher.logo : window.location.origin + '/' + publisher.logo" x-bind:alt="publisher.name" />
                     </x-slot:img>
-                    <div class="font-bold" x-text="publisher.name"></div>
+                    <div class="font-bold" x-text="publisher.name.length > 40? publisher.name.substring(0,40) + '...' : publisher.name"></div>
                 </x-table.td-with-image>
                 <td>
                     <template x-if="publisher.books.length == 0">

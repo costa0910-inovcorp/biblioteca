@@ -5,8 +5,10 @@ namespace App\Livewire;
 use App\Events\BookRequested;
 use App\Models\Book;
 use App\Models\BookRequest;
+use App\Models\BookWaitList;
 use App\Models\User;
 use App\Repositories\RequestBookRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -37,10 +39,26 @@ class RequestBook extends Component
                 "You are not allowed to borrow books.",
         ]);
 
-        $this->maxToBorrow = $repository->borrowBooks($this->booksToBorrow);
+        $toBorrow = array_filter($this->booksToBorrow, function($book) {
+            return $book['is_available'];
+        });
+
+        $forWaitList = array_filter($this->booksToBorrow, function($book) {
+            return $book['is_available'] == false;
+        });
+
+
+        if (!empty($toBorrow)) {
+            $this->maxToBorrow = $repository->borrowBooks($toBorrow);
+            $this->dispatch('books-borrowed');
+        }
+
+        if (!empty($forWaitList)) {
+            $repository->addBooksToWaitList($forWaitList);
+            //TODO: DISPATCH EVENT FOR WAIT LIST COMPONENT
+        }
 
         $this->reset('searchBookByName', 'booksToBorrow');
-        $this->dispatch('books-borrowed');
     }
 
     public function add(string $bookId): void
@@ -75,17 +93,24 @@ class RequestBook extends Component
         }
     }
 
+    protected function getAvailableBooksToBorrowOrAddToWaitList(): Builder
+    {
+        $inWaitList = BookWaitList::query()
+            ->where('user_id', auth()->id())
+            ->pluck('book_id')->toArray();
+
+        return Book::query()->whereNotIn('id', $inWaitList);
+    }
+
     public function render()
     {
         if (empty($this->searchBookByName)) {
-            $this->availableToBorrow = Book::query()
-                ->where('is_available', true)
+            $this->availableToBorrow = $this->getAvailableBooksToBorrowOrAddToWaitList()
                 ->get()
                 ->take(5)
                 ->toArray();
         } else {
-            $this->availableToBorrow = Book::query()
-                ->where('is_available', true)
+            $this->availableToBorrow = $this->getAvailableBooksToBorrowOrAddToWaitList()
                 ->where('name', 'like', '%' . $this->searchBookByName . '%')
                 ->get()
                 ->take(5)

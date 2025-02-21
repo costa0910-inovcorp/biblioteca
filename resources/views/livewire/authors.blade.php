@@ -30,7 +30,7 @@
             <tr :key="author.id">
                 <x-table.td-with-image>
                     <x-slot:img>
-                        <img x-bind:src="window.location.origin + '/' + author.photo" x-bind:alt="author.name" />
+                        <img x-bind:src="author.photo?.includes('http')? author?.photo : window.location.origin + '/' + author.photo" x-bind:alt="author.name" />
                     </x-slot:img>
                     <div class="font-bold" x-text="author.name"></div>
                 </x-table.td-with-image>

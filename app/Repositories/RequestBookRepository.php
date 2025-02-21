@@ -59,7 +59,6 @@ class RequestBookRepository
     public function addBooksToWaitList(array $booksToAdd): void
     {
         $id = auth()->id();
-
         DB::transaction(function () use ($booksToAdd, $id) {
             foreach ($booksToAdd as $book) {
                 $alreadyInWaiByUser = BookWaitList::query()
@@ -73,8 +72,9 @@ class RequestBookRepository
                         'book_id' => $book['id'],
                         'user_id' => $id
                     ]);
+                } else {
+                    abort(403, 'You can not add same book to a wait list.');
                 }
-//                else throw error if needed
             }
         });
     }

@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Events\BookRequested;
+use App\Events\BookReturned;
 use App\Models\BookRequest;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -33,9 +35,11 @@ class RequestBookCard extends Component
             $request->save();
         });
 
+//        BookReturned::dispatch($this->requestBook->book_id);
         $this->reset('returnDate');
         $this->requestBook->refresh();
         $this->dispatch('book-returned', id: $this->requestBook->user_id);
+
     }
 
 

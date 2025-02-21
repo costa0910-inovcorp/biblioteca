@@ -20,7 +20,7 @@
                 <h2>{{ $requestBook->user_name  }}</h2>
                 <span class="text-sm">{{ $requestBook->user_email }}</span>
             @else
-                <h2>{{ $requestBook->book?->name?? 'no book' }}</h2>
+                <h2>{{ \Illuminate\Support\Str::words($requestBook->book?->name, 7)?? 'no book' }}</h2>
             @endif
         </div>
         <p class="max-sm:flex max-sm:flex-col max-sm:items-center">

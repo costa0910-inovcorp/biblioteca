@@ -112,4 +112,13 @@ Route::middleware([
 
         return redirect()->route('request-books');
     })->name('public.books.request');
+
+    Route::get('/public-add-to-wait-list/{book}', function (Book $book, RequestBookRepository $repository) {
+        if (!$book->exists) {
+            abort(404, 'Book not found');
+        }
+
+        $repository->addBooksToWaitList([$book]);
+        return redirect()->route('request-books');
+    })->name('public.add-to-wait-list');
 });

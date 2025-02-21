@@ -2,9 +2,9 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
         <div class="flex justify-between gap-4 flex-wrap bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg p-4">
             <div class="sm:px-0">
-                <img src="{{ asset($review->book->cover_image) }}" alt="{{ $review->book->name }}" class="size-40 object-cover">
+                <img src="{{ asset($review->book?->cover_image) }}" alt="{{ $review->book?->name }}" class="size-40 object-cover">
                 <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    <strong>Book name:</strong> {{ $review->book->name }}</p>
+                    <strong>Book name:</strong> {{ $review->book?->name }}</p>
                 <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     <strong>Reviewed by:</strong> {{ $review->user->name }}</p>
 

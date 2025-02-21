@@ -34,9 +34,9 @@
             <tr :key="book.id">
                 <x-table.td-with-image>
                     <x-slot:img>
-                        <img x-bind:src="window.location.origin + '/' + book.cover_image" x-bind:alt="book.name" />
+                        <img x-bind:src="book.cover_image.includes('http')? book.cover_image : window.location.origin + '/' + book.cover_image" x-bind:alt="book.name" />
                     </x-slot:img>
-                    <div class="font-bold" x-text="book.name"></div>
+                    <div class="font-bold" x-text="book.name.length > 20? book.name.substring(0,20) + '...' : book.name"></div>
                 </x-table.td-with-image>
                 <td x-text="book.isbn"></td>
                 <td x-text="book.bibliography.length > 80 ? book.bibliography.substring(0, 80) + '...' : book.bibliography"></td>

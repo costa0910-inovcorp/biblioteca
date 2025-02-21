@@ -13,7 +13,7 @@
         </div>
     </figure>
     <div class="card-body">
-        <h2 class="card-title">{{ $requestBook->book?->name?? 'no book' }}</h2>
+        <h2 class="card-title">{{ \Illuminate\Support\Str::words($requestBook->book?->name, 5)?? 'no book' }}</h2>
         <p>
             <span><strong>Borrow on:</strong> {{ $requestBook->created_at }}</span>
             <span class="block"><strong>Predicted return date:</strong> {{ $requestBook->predicted_return_date }}</span>

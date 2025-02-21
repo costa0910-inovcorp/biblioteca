@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+use App\Events\BookReturned;
 use App\Events\ReviewSubmitted;
 use App\Models\BookRequest;
 use App\Models\Review;
@@ -34,6 +35,7 @@ trait ReturnRequestMethod
             $request->save();
         });
 
+        BookReturned::dispatch($request->book_id);
         $this->reset('returnDate');
         $this->dispatch('book-returned', id: $request->user_id);
     }
