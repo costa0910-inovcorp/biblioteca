@@ -5,25 +5,37 @@ use App\Events\BookRequested;
 use App\Exports\AuthorsExport;
 use App\Exports\BooksExport;
 use App\Exports\PublishersExport;
+use App\Livewire\BookDetails;
+use App\Livewire\Cart;
+use App\Livewire\CheckoutCancel;
+use App\Livewire\CheckoutSuccess;
 use App\Livewire\CreateAuthor;
 use App\Livewire\CreateBook;
 use App\Livewire\CreatePublisher;
+use App\Livewire\DeliveryAddress;
 use App\Livewire\EditBook;
+use App\Livewire\OrderSummary;
 use App\Livewire\SearchGoogleBooks;
 use App\Livewire\ShowBook;
 use App\Livewire\ShowReview;
 use App\Livewire\ShowUser;
 use App\Models\Book;
 use App\Models\BookRequest;
+use App\Models\Order;
 use App\Models\Review;
 use App\Repositories\RequestBookRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Laravel\Cashier\Cashier;
+use Livewire\Livewire;
 use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/books/{book}', BookDetails::class)->name('books.details');
 
 Route::middleware([
     'auth:sanctum',
@@ -35,8 +47,10 @@ Route::middleware([
             return redirect()->route('users');
         }
         return redirect()->route('books');
-        });
     });
+
+    Route::get('/cart', Cart::class)->name('cart');
+});
 
 Route::middleware([
     'auth:sanctum',
@@ -84,6 +98,8 @@ Route::middleware([
         return view('reviews');
     })->name('reviews');
     Route::get('/reviews/{id}', ShowReview::class)->name('reviews.show');
+
+    Route::get('/orders', OrderSummary::class)->name('orders');
 });
 
 // request book
@@ -97,7 +113,7 @@ Route::middleware([
     Route::get('/books', function () {
         return view('books');
     })->name('books');
-    Route::get('/books/show/{book}', ShowBook::class)->name('books.show');
+    Route::get('/books/show/{book}', BookDetails::class)->name('books.show');
 
     Route::get('/request-books', function () {
         return view('request-books');
@@ -121,4 +137,16 @@ Route::middleware([
         $repository->addBooksToWaitList([$book]);
         return redirect()->route('request-books');
     })->name('public.add-to-wait-list');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'role:citizen'
+])->group(function () {
+    Route::get('/checkout/delivery-address', DeliveryAddress::class)->name('delivery-address');
+    Route::get('/checkout/success', CheckoutSuccess::class)->name('checkout-success');
+
+    Route::get('/checkout/cancel', CheckoutCancel::class)->name('checkout-cancel');
 });

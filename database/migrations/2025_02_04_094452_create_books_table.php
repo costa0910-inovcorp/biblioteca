@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('bibliography')->nullable();
             $table->text('cover_image')->nullable();
             $table->decimal('price');
+            $table->string('stripe_price_id')->nullable()->default(null);
             $table->boolean('is_available')->default(true);
             $table->foreignUuid('publisher_id')->nullable()
                 ->constrained('publishers', 'id')->nullOnDelete();

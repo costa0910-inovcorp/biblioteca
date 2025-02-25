@@ -9,24 +9,27 @@
         @foreach($books as $book)
             <div class="card bg-base-100 flex-auto  w-72 shadow-xl">
                 <figure>
-                    <img
-                        src="{{ $book->cover_image }}"
-{{--                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"--}}
-                        alt="{{ $book->name }}" />
+                    <a href="{{ route('books.details', ['book' => $book->id]) }}">
+                        <img
+                            src="{{ $book->cover_image }}"
+                            alt="{{ $book->name }}" />
+                    </a>
                 </figure>
                 <div class="card-body">
-                    <h2 class="card-title">
-                       {{ \Illuminate\Support\Str::words($book->name, 5) }}
-                    </h2>
-                    <p>{{ \Illuminate\Support\Str::words($book->bibliography, 10) }}</p>
-                    <div class="card-actions justify-end">
-                        @if($book->is_available)
-                            <a class="btn btn-primary btn-xs" href="{{ route('public.books.request', ['book' => $book->id]) }}">Borrow</a>
-                        @else
-                            <div class="badge badge-outline">Not available</div>
-                            <a class="btn btn-warning btn-xs" href="{{ route('public.add-to-wait-list', ['book' => $book->id]) }}">Add to wait list</a>
-                        @endif
-                    </div>
+                    <a href="{{ route('books.details', ['book' => $book->id]) }}">
+                        <h2 class="card-title">
+                           {{ \Illuminate\Support\Str::words($book->name, 5) }}
+                        </h2>
+                        <p>{{ \Illuminate\Support\Str::words($book->bibliography, 10) }}</p>
+{{--                        <div class="card-actions justify-end">--}}
+{{--                            @if($book->is_available)--}}
+{{--                                <a class="btn btn-primary btn-xs" href="{{ route('public.books.request', ['book' => $book->id]) }}">Borrow</a>--}}
+{{--                            @else--}}
+{{--                                <div class="badge badge-outline">Not available</div>--}}
+{{--                                <a class="btn btn-warning btn-xs" href="{{ route('public.add-to-wait-list', ['book' => $book->id]) }}">Add to wait list</a>--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
+                    </a>
                 </div>
             </div>
         @endforeach

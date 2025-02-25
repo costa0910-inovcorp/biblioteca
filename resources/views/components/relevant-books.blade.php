@@ -1,5 +1,5 @@
 @props(['books' => []])
-<div class="space-y-3">
+<div class="space-y-3 px-4 sm:px-0 mb-4">
     <p class="text-lg">You may like this books</p>
     @if(count($books) == 0)
         <p class="text-center">Nothing found</p>
@@ -18,7 +18,7 @@
                         <h2 class="card-title">{{ \Illuminate\Support\Str::words($book['name'], 5)}}</h2>
                         <p>{{ \Illuminate\Support\Str::words($book['bibliography'], 10) }}</p>
                         <div class="card-actions">
-                            <a class="link link-primary" href="{{ $book['id'] }}">More details</a>
+                            <a class="link link-primary" href="{{ route('books.details', ['book' => $book['id']]) }}">More details</a>
                         </div>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -14,7 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasRoles;
+    use HasApiTokens, HasRoles, Billable;
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
@@ -65,6 +66,14 @@ class User extends Authenticatable
 
     public function bookWaitList(): HasMany {
         return $this->hasMany(BookWaitList::class, 'user_id', 'id');
+    }
+
+    public function orders(): HasMany {
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+
+    public function cartItems(): HasMany {
+        return $this->hasMany(CartItem::class, 'user_id', 'id');
     }
 
     /**

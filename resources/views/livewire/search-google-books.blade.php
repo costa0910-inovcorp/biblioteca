@@ -84,7 +84,7 @@
                             </p>
                             <p>
                                 <strong>Price: </strong>
-                                @if ($book['price']))
+                                @if ($book['price'])
                                     €{{ $book['price'] }}
                                 @elseif($book['price'] == 0)
                                     FREE

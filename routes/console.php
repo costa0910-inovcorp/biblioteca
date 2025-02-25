@@ -1,7 +1,9 @@
 <?php
 
+use App\Mail\NeedHelpMail;
 use App\Mail\UserReturnBookRemainderNotification;
 use App\Models\BookRequest;
+use App\Models\CartItem;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
@@ -29,3 +31,19 @@ Schedule::call(function () {
    Log::info("All remainder for borrowed books that's will due tomorrow ($tomorrowDate) was sent. Remainder sent: ",
        (array) count($requestDueTomorrow->toArray()));
 })->daily();
+
+Schedule::call(function () {
+    $startOfPastHour = now()->subHour()->startOfHour();
+    $endOfPastHour = now()->subHour()->endOfHour();
+
+    $addedPastHour = CartItem::with('user')
+        ->whereBetween('created_at', [$startOfPastHour, $endOfPastHour])
+        ->get();
+
+    // Get unique users
+    $uniqueUsers = $addedPastHour->unique('user_id');
+
+    foreach ($uniqueUsers as $item) {
+        Mail::to($item->user->email)->send(new NeedHelpMail($item->user));
+    }
+})->hourly();

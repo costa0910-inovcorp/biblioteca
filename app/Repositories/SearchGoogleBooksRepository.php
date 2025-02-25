@@ -50,7 +50,7 @@ class SearchGoogleBooksRepository
                 'name' => array_key_exists('title', $book['volumeInfo']) ? $book['volumeInfo']['title'] : 'No title',
                 'authors' => array_key_exists('authors', $book['volumeInfo']) ? $book['volumeInfo']['authors'] : [],
                 'publisher' => array_key_exists('publisher', $book['volumeInfo']) ? $book['volumeInfo']['publisher'] : null,
-                'price' =>  $this->getPrice($book['volumeInfo']),
+                'price' =>  array_key_exists('saleInfo', $book) ? $this->getPrice($book['saleInfo']) : 0.0,
                 'bibliography' => array_key_exists('description', $book['volumeInfo'])
                     ? $book['volumeInfo']['description'] : null,
                 'isbn' => $this->getIsbn($book['volumeInfo']),
@@ -65,14 +65,8 @@ class SearchGoogleBooksRepository
         ];
     }
 
-    private function getPrice(array $volumeInfo) : float
+    private function getPrice(array $saleInfo) : float
     {
-        if (!array_key_exists('saleInfo', $volumeInfo)) {
-            return 0;
-        }
-
-        $saleInfo = $volumeInfo['saleInfo'];
-
         if (array_key_exists('retailPrice', $saleInfo)) {
             return $saleInfo['retailPrice']['amount'];
         }
