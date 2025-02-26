@@ -47,7 +47,7 @@ Route::middleware([
             return redirect()->route('users');
         }
         return redirect()->route('books');
-    });
+    })->name('dashboard');
 
     Route::get('/cart', Cart::class)->name('cart');
 });

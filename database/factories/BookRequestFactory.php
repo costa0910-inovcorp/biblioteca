@@ -30,6 +30,9 @@ class BookRequestFactory extends Factory
         return [
             'book_id' => $book->id,
             'user_id' => $user->id,
+            'is_reviewed' => false,
+            'predicted_return_date' => now()->addDays(5),
+            'return_date' => null,
             'user_email' => $user->email,
             'user_name' => $user->name,
         ];

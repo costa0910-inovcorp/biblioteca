@@ -24,6 +24,8 @@ class BookFactory extends Factory
             'name' => $this->faker->name(),
             'bibliography' => $this->faker->text(),
             'cover_image' => $this->faker->imageUrl(),
+            'is_available' => true,
+            'stripe_price_id' => null,
             'price' => $this->faker->numberBetween(100, 500),
             'publisher_id' => Publisher::factory(),
         ];

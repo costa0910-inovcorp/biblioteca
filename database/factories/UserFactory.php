@@ -34,6 +34,7 @@ class UserFactory extends Factory
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
+            'books_request_count' => 0,
             'profile_photo_path' => null,
             'current_team_id' => null,
         ];

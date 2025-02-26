@@ -26,13 +26,15 @@ class DatabaseSeeder extends Seeder
         $this->CreateRolesWithPermissions(RolesEnum::ADMIN, $adminPermissions);
         $this->CreateRolesWithPermissions(RolesEnum::CITIZEN, $citizenPermissions);
 
-        $user = User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
-        ]);
 
-        $user->assignRole(RolesEnum::ADMIN); // removed citizen so can restrict review to only citizen
+        //TODO: UNCOMMENT WHEN TEST FINNISH
+//        $user = User::create([
+//            'name' => 'Test User',
+//            'email' => 'test@example.com',
+//            'password' => bcrypt('password'),
+//        ]);
+
+//        $user->assignRole(RolesEnum::ADMIN); // removed citizen so can restrict review to only citizen
 //
 //        for ($i = 0; $i < 10; $i++) {
 //            $this->call(PublisherSeeder::class);
