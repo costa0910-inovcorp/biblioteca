@@ -120,8 +120,12 @@ Route::middleware([
     })->name('request-books');
 
     Route::get('/public-books-request/{book}', function (Book $book, RequestBookRepository $repository) {
-        if (!$book->exists || !$book->is_available) {
-            abort(404, 'Book not found or is not available.');
+        if (!$book->exists) {
+            abort(404, 'Book not found.');
+        }
+
+        if(!$book->is_available) {
+            abort(403, 'This book is not available.');
         }
 
         $repository->borrowBooks([$book]);

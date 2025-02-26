@@ -33,7 +33,6 @@ test('Citizen or Admin can request a book', function ($role) {
     $book->refresh();
     $user->refresh();
 
-//    $this->assertEquals();
     $this->assertEquals(1, $user->books_request_count);
     expect(boolval($book->is_available))->toBeFalse();
     $this->assertEquals(1, BookRequest::count());

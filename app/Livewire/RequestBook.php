@@ -47,7 +47,6 @@ class RequestBook extends Component
             return $book['is_available'] == false;
         });
 
-
         if (!empty($toBorrow)) {
             $this->maxToBorrow = $repository->borrowBooks($toBorrow);
             $this->dispatch('books-borrowed');
