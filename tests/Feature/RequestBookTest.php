@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Livewire\Livewire;
 
+uses()->group('library', 'create-request');
+
 //1. Teste de Criação de Requisição de Livro
 //
 //Verifica se um utilizador pode criar uma requisição de um livro corretamente.
@@ -36,8 +38,7 @@ test('Citizen or Admin can request a book', function ($role) {
     expect(boolval($book->is_available))->toBeFalse();
     $this->assertEquals(1, BookRequest::count());
 })
-    ->with([RolesEnum::ADMIN, RolesEnum::CITIZEN])
-    ->group('biblioteca', 'create-request');
+    ->with([RolesEnum::ADMIN, RolesEnum::CITIZEN]);
 
 
 
@@ -59,5 +60,4 @@ test('Return error when book is invalid', function ($role) {
         ->assertSee('Booko not found'))
         ->toThrow(ModelNotFoundException::class);
 })
-    ->with([RolesEnum::ADMIN, RolesEnum::CITIZEN])
-    ->group('biblioteca', 'create-request');
+    ->with([RolesEnum::ADMIN, RolesEnum::CITIZEN]);

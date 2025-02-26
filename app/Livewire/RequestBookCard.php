@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\RolesEnum;
 use App\Events\BookRequested;
 use App\Events\BookReturned;
 use App\Models\BookRequest;
@@ -22,6 +23,10 @@ class RequestBookCard extends Component
         $this->validate([
             'returnDate' => "required|date|after_or_equal:$createdAt|before_or_equal:today",
         ]);
+
+        if (!auth()->user()?->hasRole(RolesEnum::ADMIN)) {
+            abort(401);
+        }
 
         DB::transaction(function () {
             $request = BookRequest::query()->findOrFail($this->requestBook->id);

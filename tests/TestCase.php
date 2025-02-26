@@ -13,7 +13,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        // Run fresh migrations with roles/permissions
+        // Run fresh migrations and seed with roles/permissions
         Artisan::call('migrate:fresh --seed');
 
         $this->app->make(PermissionRegistrar::class)->forgetCachedPermissions();
