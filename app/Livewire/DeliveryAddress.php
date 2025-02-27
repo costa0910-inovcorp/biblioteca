@@ -29,12 +29,12 @@ class DeliveryAddress extends Component
         }
     }
 
-    public function saveDeliveryAddressAndContinue()
+    public function saveDeliveryAddressAndContinue(PlacingOrderRepository $repository)
     {
         $this->validate();
         $fullAddress = "{$this->address} {$this->zip}, {$this->city}, {$this->country}";
 
-        $repository = app(PlacingOrderRepository::class);
+//        $repository = app(PlacingOrderRepository::class);
         $userItems = CartItem::query()->where('user_id', auth()->id())->get();
 
         try {

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Book;
+use App\Repositories\LogRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -29,11 +30,17 @@ class Books extends Component
         ['field' => 'Autores', 'sort' => false, 'col' => 'author'],
     ];
 
-    public function deleteBook(Book $book): void {
+    public function deleteBook(Book $book, LogRepository $logRepository): void {
         DB::transaction(function () use ($book) {
             $book->delete();
             Storage::delete($book->cover_image);
         });
+
+        $logRepository->addRequestAction([
+            'object_id' => $book->id,
+            'app_section' => 'Books livewire component action deleteBook',
+            'alteration_made' => 'delete book'
+        ]);
     }
     public function render()
     {

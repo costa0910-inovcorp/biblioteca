@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Book;
 use App\Models\Publisher;
+use App\Repositories\LogRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Url;
@@ -24,13 +25,19 @@ class Publishers extends Component
 
     public $alpineData = [];
 
-    public function deletePublisher(Publisher $publisher)
+    public function deletePublisher(Publisher $publisher, LogRepository $logRepository)
     {
       // include all relate books
         DB::transaction(function () use ($publisher) {
             Storage::delete($publisher->logo);
             $publisher->delete();
         });
+
+        $logRepository->addRequestAction([
+            'object_id' => $publisher->id,
+            'app_section' => 'Publisher livewire component deletePublisher',
+            'alteration_made' => 'delete publisher'
+        ]);
     }
     public function render()
     {

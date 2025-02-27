@@ -6,6 +6,7 @@ use App\Events\BookReturned;
 use App\Events\ReviewSubmitted;
 use App\Models\BookRequest;
 use App\Models\Review;
+use App\Repositories\LogRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -17,7 +18,7 @@ trait ReturnRequestMethod
 
     public float $rating = 4.5;
 
-    public function confirmReturnDate(BookRequest $request): void
+    public function confirmReturnDate(BookRequest $request, LogRepository $logRepository): void
     {
         $createdAt = Carbon::parse($request->created_at)->toDateString();
         $this->validate([
@@ -36,11 +37,18 @@ trait ReturnRequestMethod
         });
 
         BookReturned::dispatch($request->book_id);
+
+        $logRepository->addRequestAction([
+            'object_id' => $request->id,
+            'app_section' => 'ReturnRequestMethod trait confirmReturnDate action',
+            'alteration_made' => 'return book and update user request count, book availability and dispatch (BookReturned) event'
+        ]);
+
         $this->reset('returnDate');
         $this->dispatch('book-returned', id: $request->user_id);
     }
 
-    public function reviewBook(string $requestId): void {
+    public function reviewBook(string $requestId, LogRepository $logRepository): void {
         $this->validate([
             'comment' => "required|string|min:10",
             'rating' => "required|numeric|between:1,5",
@@ -69,6 +77,12 @@ trait ReturnRequestMethod
 
             ReviewSubmitted::dispatch($review);
         });
+
+        $logRepository->addRequestAction([
+            'object_id' => $request->id,
+            'app_section' => 'ReturnRequestMethod trait reviewBook action',
+            'alteration_made' => 'create review for the request, change request to reviewed and dispatch (ReviewSubmitted) event'
+        ]);
 
         $this->reset('rating', 'comment');
         $this->dispatch('review-submitted');

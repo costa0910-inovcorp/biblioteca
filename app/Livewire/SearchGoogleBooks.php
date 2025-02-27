@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Events\SaveBooksToDB;
+use App\Repositories\LogRepository;
 use App\Repositories\SearchGoogleBooksRepository;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
@@ -134,7 +135,7 @@ class SearchGoogleBooks extends Component
         }
     }
 
-    public function saveBooks(): void {
+    public function saveBooks(LogRepository $logRepository): void {
         //TODO: Do something before dispatch event to save books
         $userId = auth()->id();
         $newProcessId = Str::uuid()->toString();
@@ -143,6 +144,11 @@ class SearchGoogleBooks extends Component
             'status' => 'START',
             'totalBooks' => count($this->searchResult['items']),
             'id' => $newProcessId,
+        ]);
+        $logRepository->addRequestAction([
+            'object_id' => 'process id: ' . $newProcessId,
+            'app_section' => 'SearchGoogleBooks livewire component action saveBooks',
+            'alteration_made' => 'it dispatch (SaveBooksToDB) event, it\'s will create passed books to database: ' . count($this->searchResult['items'])
         ]);
 //        $this->isActualPageBooksSaved = true;
     }

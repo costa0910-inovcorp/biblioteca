@@ -6,6 +6,7 @@ use App\Livewire\Forms\BookForm;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Publisher;
+use App\Repositories\LogRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
@@ -31,7 +32,7 @@ class CreateBook extends Component
     /**
      * @throws \Exception
      */
-    public function createPost() {
+    public function createPost(LogRepository $logRepository) {
         $this->validate();
 
         //create require, update optional
@@ -59,6 +60,12 @@ class CreateBook extends Component
             $newBook->authors()->attach($this->form->authorsId);
 
             DB::commit();
+
+            $logRepository->addRequestAction([
+                'object_id' => $newBook->id,
+                'app_section' => 'CreateBook livewire component action createPost',
+                'alteration_made' => 'create new book',
+            ]);
 
             Request::session()->flash('flash.banner', 'Book created successfully');
             Request::session()->flash('flash.bannerStyle', 'success');

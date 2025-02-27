@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Author;
 use App\Models\Publisher;
+use App\Repositories\LogRepository;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -29,16 +30,22 @@ class CreateAuthor extends Component
            $this->name = $author->name;
         }
     }
-    public function create() {
+    public function create(LogRepository $logRepository) {
         $this->validate([
             'name' => 'required',
             'imageFile' => 'required|image|mimes:jpeg,png,jpg|max:1048',
         ]);
 
-        Author::query()->create([
+        $author = Author::query()->create([
             'id' => Str::uuid(),
             'name' => $this->name,
             'photo' => $this->imageFile->store('authors', 'public')
+        ]);
+
+        $logRepository->addRequestAction([
+            'object_id' => $author->id,
+            'app_section' => 'CreateAuthor livewire component action create',
+            'alteration_made' => 'create author',
         ]);
 
         Request::session()->flash('flash.banner', 'Author created successfully');
@@ -47,7 +54,7 @@ class CreateAuthor extends Component
         return redirect()->route('authors');
     }
 
-    public function edit()
+    public function edit(LogRepository $logRepository)
     {
         $this->validate([
             'name' => 'required',
@@ -65,6 +72,12 @@ class CreateAuthor extends Component
         $author->update([
             'name' => $this->name,
             'photo' => $path,
+        ]);
+
+        $logRepository->addRequestAction([
+            'object_id' => $author->id,
+            'app_section' => 'CreateAuthor livewire component action edit',
+            'alteration_made' => 'edit author',
         ]);
 
         Request::session()->flash('flash.banner', 'Author updated successfully');

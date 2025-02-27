@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Enums\ReviewEnum;
 use App\Events\ReviewStatusChange;
 use App\Models\Review as ReviewAlias;
+use App\Repositories\LogRepository;
 use Livewire\Component;
 
 class ShowReview extends Component
@@ -19,7 +20,7 @@ class ShowReview extends Component
             ->findOrFail($id);
     }
 
-    public function changeStatus() {
+    public function changeStatus(LogRepository $logRepository) {
         $this->validate([
             'status' => 'required|min:1'
         ]);
@@ -39,6 +40,12 @@ class ShowReview extends Component
         ]);
 
         ReviewStatusChange::dispatch($this->review);
+
+        $logRepository->addRequestAction([
+            'object_id' => $this->review->id,
+            'app_section' => 'ShowReview livewire component action changeStatus',
+            'alteration_made' => 'change review status to ' . $this->status . 'and dispatch event to send reviewer email'
+        ]);
     }
 
     public function render()

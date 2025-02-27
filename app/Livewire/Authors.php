@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Publisher;
+use App\Repositories\LogRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Url;
@@ -50,11 +51,17 @@ class Authors extends Component
         return view('livewire.authors', ['authors' => $authors]);
     }
 
-    public function deleteAuthor(Author $author): void {
+    public function deleteAuthor(Author $author, LogRepository $logRepository): void {
         DB::transaction(function () use ($author) {
             Storage::delete($author->photo);
             $author->delete();
         });
+
+        $logRepository->addRequestAction([
+            'object_id' => $author->id,
+            'app_section' => 'Authors livewire component action deleteAuthor',
+            'alteration_made' => 'delete author'
+        ]);
     }
 
     protected function queryNested(string $table)  {

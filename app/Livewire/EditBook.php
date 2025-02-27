@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Livewire\Forms\BookForm;
 use App\Models\Book;
+use App\Repositories\LogRepository;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -20,7 +21,7 @@ class EditBook extends Component
         $this->form->setBook($book);
     }
 
-    public function editBook()
+    public function editBook(LogRepository $logRepository)
     {
         $this->validate();
         $path = $this->oldBookData->cover_image;
@@ -38,6 +39,12 @@ class EditBook extends Component
         $book->cover_image = $path;
 
         $book->save();
+
+        $logRepository->addRequestAction([
+            'object_id' => $book->id,
+            'app_section' => 'EditBook livewire component action editBook',
+            'alteration_made' => 'edit book',
+        ]);
 
         Request::session()->flash('flash.banner', 'Book updated successfully');
         Request::session()->flash('flash.bannerStyle', 'success');

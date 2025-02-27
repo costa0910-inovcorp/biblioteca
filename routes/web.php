@@ -23,6 +23,7 @@ use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\Order;
 use App\Models\Review;
+use App\Repositories\LogRepository;
 use App\Repositories\RequestBookRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +61,13 @@ Route::middleware([
 ])->group(function () {
     Route::get('/books/create', CreateBook::class)->name('books.create');
     Route::get('/books/edit/{book}', EditBook::class)->name('books.edit');
-    Route::get('/books/export', function () {
+    Route::get('/books/export', function (LogRepository $logRepository) {
+        $logRepository->addRequestAction([
+            'object_id' => 'books',
+            'app_section' => '/books/export endpoint',
+            'alteration_made' => 'download books',
+        ]);
+
         return Excel::download(new BooksExport(), 'livros.xlsx');
     })->name('books.export');
 
@@ -70,7 +77,12 @@ Route::middleware([
     })->name('publishers');
     Route::get('/publishers/create', CreatePublisher::class)->name('publishers.create');
     Route::get('/publishers/edit/{publisher}', CreatePublisher::class)->name('publishers.edit');
-    Route::get('/publishers/export', function () {
+    Route::get('/publishers/export', function (LogRepository $logRepository) {
+        $logRepository->addRequestAction([
+            'object_id' => 'publishers',
+            'app_section' => '/publishers/export endpoint',
+            'alteration_made' => 'download publishers',
+        ]);
         return Excel::download(new PublishersExport(), 'editoras.xlsx');
     })->name('publishers.export');
 
@@ -80,7 +92,13 @@ Route::middleware([
     })->name('authors');
     Route::get('/authors/create', CreateAuthor::class)->name('authors.create');
     Route::get('/authors/edit/{author}', CreateAuthor::class)->name('authors.edit');
-    Route::get('/authors/export', function () {
+    Route::get('/authors/export', function (LogRepository $logRepository) {
+        $logRepository->addRequestAction([
+            'object_id' => 'authors',
+            'app_section' => '/authors/export endpoint',
+            'alteration_made' => 'download authors',
+        ]);
+
         return Excel::download(new AuthorsExport(), 'autores.xlsx');
     })->name('authors.export');
 

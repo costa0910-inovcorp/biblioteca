@@ -14,6 +14,12 @@ class PlacingOrderRepository
 {
     // Set your secret key. Remember to switch to your live secret key in production.
     // See your keys here: https://dashboard.stripe.com/apikeys
+    protected LogRepository $logRepository;
+
+    public function __construct(LogRepository $logRepository)
+    {
+        $this->logRepository = $logRepository;
+    }
 
     protected function CreateOrFindPriceIds($items): array {
         $stripe = new StripeClient(config('services.stripe.secret'));
@@ -62,6 +68,12 @@ class PlacingOrderRepository
 
         //Delete all
         CartItem::query()->whereIn('id',$cartItemsIds)->delete();
+
+        $this->logRepository->addRequestAction([
+            'object_id' => $order->id,
+            'app_section' => 'PlacingOrderRepository class action createOrder',
+            'alteration_made' => 'find products price_ids on database or create new prices on stripe and save to database, create new order items/order and delete user cart items'
+        ]);
 
         return [
             'order' => $order,

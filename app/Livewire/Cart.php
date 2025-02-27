@@ -3,13 +3,14 @@
 namespace App\Livewire;
 
 use App\Models\CartItem;
+use App\Repositories\LogRepository;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Cart extends Component
 {
 
-    public function removeFromCart(string $bookId): void
+    public function removeFromCart(string $bookId, LogRepository $logRepository): void
     {
         $item = CartItem::query()
             ->where('user_id', auth()->id())
@@ -17,6 +18,13 @@ class Cart extends Component
 
         if ($item->exists) {
             $item->delete();
+
+            $logRepository->addRequestAction([
+                'object_id' => $item->book_id,
+                'app_section' => 'Cart livewire component action removeFromCart',
+                'alteration_made' => 'remove item from cart',
+            ]);
+
             $this->dispatch('refresh');
             $this->dispatch('removed-from-cart', removed: true, message:'Book has been removed from your cart');
         }

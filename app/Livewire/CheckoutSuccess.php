@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Order;
+use App\Repositories\LogRepository;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Cashier;
 use Livewire\Attributes\On;
@@ -12,7 +13,7 @@ class CheckoutSuccess extends Component
 {
     public Order $order;
 
-    public function mount(Request $request)
+    public function mount(Request $request, LogRepository $logRepository)
     {
         $sessionId = $request->get('session_id');
 
@@ -31,6 +32,13 @@ class CheckoutSuccess extends Component
         $order = Order::findOrFail($orderId);
 
         $order->update(['status' => 'completed']);
+
+        $logRepository->addRequestAction([
+            'object_id' => $order->id,
+            'app_section' => 'CheckoutSuccess livewire action on component mount',
+            'alteration_made' => 'change order status to completed',
+        ]);
+
         $this->order = $order;
         $this->dispatch('order-placed');
     }

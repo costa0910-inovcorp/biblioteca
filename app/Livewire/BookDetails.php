@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Livewire\Forms\ReturnRequestMethod;
 use App\Models\Book;
 use App\Models\CartItem;
+use App\Repositories\LogRepository;
 use App\Repositories\RelevantBooksRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\RedirectResponse;
@@ -23,7 +24,7 @@ class BookDetails extends Component
         $this->book = $book;
     }
 
-    public function addToCart()
+    public function addToCart(LogRepository $logRepository)
     {
         if(empty(auth()->user())) {
             return redirect()->route('login');
@@ -38,12 +39,19 @@ class BookDetails extends Component
             return;
         }
 
-        CartItem::query()
+        $newItem = CartItem::query()
             ->create([
                 'user_id' => auth()->id(),
                 'book_id' => $this->book->id,
                 'id' => Str::uuid(),
             ]);
+
+        $logRepository->addRequestAction([
+            'object_id' => $newItem->id,
+            'app_section' => 'BookDetails livewire component action addToCart',
+            'alteration_made' => 'added new book to cart',
+        ]);
+
         $this->dispatch('book-added-to-cart', success: true, message:'Book added to cart');
     }
 

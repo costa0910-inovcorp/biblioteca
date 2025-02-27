@@ -11,11 +11,11 @@ class Log extends Model
         'user_id',
         'user_agent',
         'ip_address',
-        'app_section',
         'date',
         'time',
         'object_id',
-        'alteration'
+        'app_section',
+        'alteration_made'
     ];
     public $incrementing = false;
 

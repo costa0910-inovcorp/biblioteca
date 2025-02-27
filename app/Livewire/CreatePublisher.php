@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Author;
 use App\Models\Publisher;
+use App\Repositories\LogRepository;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -24,22 +25,28 @@ class CreatePublisher extends Component
     public $publisher  = null;
 
     public function mount(?Publisher $publisher) {
-        if ($publisher->exists) {
+        if ($publisher?->exists) {
             $this->publisher = $publisher;
             $this->name = $publisher->name;
         }
     }
 
-    public function create() {
+    public function create(LogRepository $logRepository) {
         $this->validate([
             'name' => 'required',
             'imageFile' => 'required|image|mimes:jpeg,png,jpg|max:1048',
         ]);
 
-        Publisher::query()->create([
+        $publisher = Publisher::query()->create([
             'id' => Str::uuid(),
             'name' => $this->name,
             'logo' => $this->imageFile->store('publishers', 'public')
+        ]);
+
+        $logRepository->addRequestAction([
+            'object_id' => $publisher->id,
+            'app_section' => 'CreatePublisher livewire component action create',
+            'alteration_made' => 'create new publisher',
         ]);
 
         Request::session()->flash('flash.banner', 'Publisher created successfully');
@@ -48,7 +55,7 @@ class CreatePublisher extends Component
         return redirect()->route('publishers');
     }
 
-    public function edit()
+    public function edit(LogRepository $logRepository)
     {
         $this->validate([
             'name' => 'required',
@@ -66,6 +73,12 @@ class CreatePublisher extends Component
         $publisher->update([
             'name' => $this->name,
             'logo' => $path,
+        ]);
+
+        $logRepository->addRequestAction([
+            'object_id' => $publisher->id,
+            'app_section' => 'EditPublisher livewire component action edit',
+            'alteration_made' => 'edit publisher'
         ]);
 
         Request::session()->flash('flash.banner', 'Publisher updated successfully');

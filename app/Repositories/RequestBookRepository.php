@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use AllowDynamicProperties;
 use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\BookWaitList;
@@ -16,6 +17,7 @@ use function Pest\Laravel\put;
 class RequestBookRepository
 {
     private const LIMIT_TO_BORROW = 3;
+    public function __construct(protected LogRepository $logRepository) {}
 
     public function borrowBooks(array $booksToBorrow): int
     {
@@ -48,6 +50,12 @@ class RequestBookRepository
             $user->books_request_count += count($booksToBorrow);
             $user->save();
             DB::commit();
+
+            $this->logRepository->addRequestAction([
+                'object_id' => collect($booksToBorrow)->pluck('id')->join(', '),
+                'app_section' => 'RequestBookRepository class action borrowBooks',
+                'alteration_made' => 'added one or more books to user borrowed',
+            ]);
 
             $user->fresh();
             return self::LIMIT_TO_BORROW - $user->books_request_count;
@@ -84,5 +92,11 @@ class RequestBookRepository
                 }
             }
         });
+
+        $this->logRepository->addRequestAction([
+            'object_id' => collect($booksToAdd)->pluck('id')->join(', '),
+            'app_section' => 'RequestBookRepository action addBooksToWaitList',
+            'alteration_made' => 'added one or more books to user waitlist',
+        ]);
     }
 }
