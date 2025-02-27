@@ -26,8 +26,9 @@ class RequestBookRepository
         }
 
         try {
+            DB::beginTransaction();
+
             foreach ($booksToBorrow as $book) {
-                //TODO: ask Nuno if to let user choose return date and if to emit only one event
                 $request = BookRequest::create([
                     'book_id' => $book['id'],
                     'user_id' => $authUser->id,
@@ -48,6 +49,7 @@ class RequestBookRepository
             $user->save();
             DB::commit();
 
+            $user->fresh();
             return self::LIMIT_TO_BORROW - $user->books_request_count;
 
         } catch (Exception $exception) {
@@ -65,12 +67,17 @@ class RequestBookRepository
                     ->where('book_id', $book['id'])
                     ->where('user_id', $id)->get();
 
-                //Only add book if user is not already wait for it
+                //Only add book if user is not already waiting for it
                 if ($alreadyInWaiByUser->isEmpty()) {
+                    $positionOnLine = BookWaitList::query()
+                        ->where('book_id', $book['id'])
+                        ->count() + 1;
+
                     BookWaitList::query()->create([
                         'id' => Str::uuid(),
                         'book_id' => $book['id'],
-                        'user_id' => $id
+                        'user_id' => $id,
+                        'position' => $positionOnLine
                     ]);
                 } else {
                     abort(403, 'You can not add same book to a wait list.');

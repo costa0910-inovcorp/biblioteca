@@ -4,7 +4,7 @@
     use Carbon\Carbon;
 @endphp
 
-<div {{ $attributes->merge(['class' => 'card card-side bg-base-100 shadow-xl card-compact card-bordered']) }}>
+<div {{ $attributes->merge(['class' => 'card card-side bg-base-100 shadow-sm card-compact card-bordered']) }}>
     @if(!$showUser)
         <figure>
             <div class="avatar">

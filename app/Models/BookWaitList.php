@@ -15,7 +15,8 @@ class BookWaitList extends Model
     protected $fillable = [
         'user_id',
         'book_id',
-        'id'
+        'id',
+        'position'
     ];
 
     public function book(): BelongsTo

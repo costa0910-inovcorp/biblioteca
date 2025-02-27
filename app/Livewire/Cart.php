@@ -24,7 +24,16 @@ class Cart extends Component
 
     public function render()
     {
-        $items = auth()->user()->cartItems()->with('book')->get();
+        $items = CartItem::query()->with('book')
+        ->where('user_id', auth()->id())->latest()->get();
+
+        $items = $items->filter(function ($item) {
+            if(!$item->book){
+                $this->removeFromCart($item->book_id);
+            }
+            return $item->book != null;
+        });
+
         $total = $items->sum(function ($item) {
             return $item->book->price * $item->quantity;
         });

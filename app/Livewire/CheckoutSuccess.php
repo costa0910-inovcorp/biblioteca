@@ -37,6 +37,10 @@ class CheckoutSuccess extends Component
 
     public function render()
     {
-        return view('livewire.checkout-success')->layout('layouts.app');
+        return view('livewire.checkout-success', [
+            'items' => $this->order->items()
+                ->with('book')
+                ->get()
+        ])->layout('layouts.app');
     }
 }

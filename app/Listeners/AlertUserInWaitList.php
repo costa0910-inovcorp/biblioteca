@@ -34,6 +34,9 @@ class AlertUserInWaitList
         if ($inWaitList?->exists) {
             Mail::to($inWaitList->user->email)->sendNow(new WaitListAlert($inWaitList));
             $inWaitList->delete();
+            BookWaitList::query()
+                ->where('book_id', '=', $event->bookId)
+                ->decrement('position');
             Log::info('Email sent', ['email' => $inWaitList->user->email]);
         }
     }

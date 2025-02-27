@@ -54,7 +54,7 @@ class RequestBook extends Component
 
         if (!empty($forWaitList)) {
             $repository->addBooksToWaitList($forWaitList);
-            //TODO: DISPATCH EVENT FOR WAIT LIST COMPONENT
+            $this->dispatch('book-added-to-waitlist');
         }
 
         $this->reset('searchBookByName', 'booksToBorrow');

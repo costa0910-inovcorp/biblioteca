@@ -28,14 +28,14 @@ class DatabaseSeeder extends Seeder
 
 
         //TODO: UNCOMMENT WHEN TEST FINNISH
-//        $user = User::create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
-//            'password' => bcrypt('password'),
-//        ]);
+        $user = User::create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+        ]);
 
-//        $user->assignRole(RolesEnum::ADMIN); // removed citizen so can restrict review to only citizen
-//
+        $user->assignRole(RolesEnum::ADMIN); // removed citizen so can restrict review to only citizen
+
 //        for ($i = 0; $i < 10; $i++) {
 //            $this->call(PublisherSeeder::class);
 //            $this->call(BookSeeder::class);

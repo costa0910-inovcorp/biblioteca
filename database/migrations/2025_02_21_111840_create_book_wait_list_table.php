@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('book_wait_list', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->integer('position');
             $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
             $table->foreignUuid('book_id')->constrained('books', 'id')->onDelete('cascade');
             $table->timestamps();

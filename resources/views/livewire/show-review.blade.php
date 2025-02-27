@@ -1,6 +1,6 @@
 <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
-        <div class="flex justify-between gap-4 flex-wrap bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg p-4">
+        <div class="flex gap-4 flex-wrap bg-white dark:bg-gray-800 sm:rounded-lg p-4">
             <div class="sm:px-0">
                 <img src="{{ asset($review->book?->cover_image) }}" alt="{{ $review->book?->name }}" class="size-40 object-cover">
                 <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -26,9 +26,9 @@
 
             @if($review->status == 'pending')
 {{--                <div class="flex flex-col gap-2 w-52">--}}
-                    <form wire:submit="changeStatus" class="flex flex-col gap-2 w-52">
+                    <form wire:submit="changeStatus" class="flex flex-col gap-2 max-sm:w-full w-72">
                         <div>
-                            <select class="select select-bordered w-full max-w-xs" wire:model.live="status">
+                            <select class="select select-bordered w-full md:max-w-xs" wire:model.live="status">
                                 <option selected>Select status</option>
                                 <option value="approved">APPROVED</option>
                                 <option value="rejected">REJECTED</option>

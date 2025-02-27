@@ -25,30 +25,6 @@ class UserRequests extends Component
         $this->dispatch('refresh');
     }
 
-    //Removed this method to void duplication by extracting it to trait ReturnRequestMethod
-
-//    public function confirmReturnDate(BookRequest $request): void
-//    {
-//        $createdAt = Carbon::parse($request->created_at)->toDateString();
-//        $this->validate([
-//            'returnDate' => "required|date|after_or_equal:$createdAt|before_or_equal:today",
-//        ]);
-//
-//        DB::transaction(function () use ($request) {
-//            $request->book()->update([
-//                'is_available' => true,
-//            ]);
-//            $user = $request->user()->first();
-//            $user->books_request_count -= 1;
-//            $user->save();
-//            $request->return_date = Carbon::parse($this->returnDate);
-//            $request->save();
-//        });
-//
-//        $this->reset('returnDate');
-//        $this->dispatch('book-returned', id: $request->user_id);
-//    }
-
     public function render()
     {
         $userRequests = BookRequest::query()

@@ -5,11 +5,11 @@
                 <livewire:request-book-stats />
             @endcan
             <div class="grid gap-4 md:grid-cols-2 items-start">
-                <div class="bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg col p-4">
+                <div class="bg-white dark:bg-gray-800  sm:rounded-lg col p-4">
                     <livewire:request-book />
                 </div>
-                <div class="bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg col p-4">
-                    <livewire:user-requests />
+                <div class="bg-white dark:bg-gray-800 sm:rounded-lg col p-4">
+                    <livewire:user-tabs />
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@
             <p class="text-center text-2xl font-extrabold">Nothing in your cart, browse books</p>
         @else
             <p><strong class="text-lg font-extrabold px-4 sm:px-0">My cart</strong> ({{ count($items) }} items)</p>
-            <div class="grid gap-6 md:grid-cols-3 px-4 sm:px-0 ">
+            <div class="grid gap-6 md:grid-cols-3 px-4 sm:px-0">
                 <div class="md:col-span-2 flex flex-col gap-2">
                     @foreach($items as $item)
                         <div class="card bg-base-100 w-full  lg:w-9/12 card-side">
