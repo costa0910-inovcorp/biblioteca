@@ -31,7 +31,9 @@ class OrderSummary extends Component
             $orders = Order::query()
                 ->with(['user'])
                 ->whereAny(['delivery_address', 'status'], 'like', '%'.$this->search.'%')
-                ->orderByDesc('created_at')
+                ->orWhereHas('user', function ($query) {
+                    $query->where('name', 'LIKE', "%{$this->search}%");
+                })->orderByDesc('created_at')
                 ->paginate($this->pageSize);
 
         } else {

@@ -37,6 +37,9 @@
                         <x-nav-link href="{{ route('orders') }}" :active="request()->routeIs('orders')">
                             {{ __('Orders') }}
                         </x-nav-link>
+                        <x-nav-link href="{{ route('logs') }}" :active="request()->routeIs('logs')">
+                            {{ __('Logs') }}
+                        </x-nav-link>
                     @endrole
 
 {{--                    both admin and user can access this route--}}
@@ -205,6 +208,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link href="{{ route('orders') }}" :active="request()->routeIs('orders')">
                     {{ __('Orders') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('logs') }}" :active="request()->routeIs('logs')">
+                    {{ __('Logs') }}
                 </x-responsive-nav-link>
             @endrole
 

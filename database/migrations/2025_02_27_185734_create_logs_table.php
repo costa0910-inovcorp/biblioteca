@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('logs', function (Blueprint $table) {
-            $table->uuid('id')->primary()->default(Str::uuid());
+            $table->uuid('id')->primary();
             $table->date('date');
             $table->time('time');
             $table->string('object_id');

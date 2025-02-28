@@ -54,7 +54,7 @@ class RequestBookRepository
             $this->logRepository->addRequestAction([
                 'object_id' => collect($booksToBorrow)->pluck('id')->join(', '),
                 'app_section' => 'RequestBookRepository class action borrowBooks',
-                'alteration_made' => 'added one or more books to user borrowed',
+                'alteration_made' => 'add one or more books to user borrowed',
             ]);
 
             $user->fresh();
@@ -96,7 +96,7 @@ class RequestBookRepository
         $this->logRepository->addRequestAction([
             'object_id' => collect($booksToAdd)->pluck('id')->join(', '),
             'app_section' => 'RequestBookRepository action addBooksToWaitList',
-            'alteration_made' => 'added one or more books to user waitlist',
+            'alteration_made' => 'add one or more books to user waitlist',
         ]);
     }
 }

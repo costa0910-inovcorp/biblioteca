@@ -17,5 +17,5 @@
             </div>
         </th>
     @endforeach
-    <th></th>
+{{--    <th></th>--}}
 </tr>

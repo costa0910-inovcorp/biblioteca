@@ -19,6 +19,7 @@ use App\Livewire\SearchGoogleBooks;
 use App\Livewire\ShowBook;
 use App\Livewire\ShowReview;
 use App\Livewire\ShowUser;
+use App\Livewire\SystemLogs;
 use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\Order;
@@ -36,8 +37,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/books/{book}', BookDetails::class)->name('books.details');
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -49,8 +48,6 @@ Route::middleware([
         }
         return redirect()->route('books');
     })->name('dashboard');
-
-    Route::get('/cart', Cart::class)->name('cart');
 });
 
 Route::middleware([
@@ -118,6 +115,7 @@ Route::middleware([
     Route::get('/reviews/{id}', ShowReview::class)->name('reviews.show');
 
     Route::get('/orders', OrderSummary::class)->name('orders');
+    Route::get('/logs', SystemLogs::class)->name('logs');
 });
 
 // request book
@@ -171,4 +169,8 @@ Route::middleware([
     Route::get('/checkout/success', CheckoutSuccess::class)->name('checkout-success');
 
     Route::get('/checkout/cancel', CheckoutCancel::class)->name('checkout-cancel');
+    Route::get('/cart', Cart::class)->name('cart');
 });
+
+
+Route::get('/books/{book}', BookDetails::class)->name('books.details');

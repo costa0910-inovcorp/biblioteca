@@ -53,7 +53,9 @@ class Authors extends Component
 
     public function deleteAuthor(Author $author, LogRepository $logRepository): void {
         DB::transaction(function () use ($author) {
-            Storage::delete($author->photo);
+            if($author->photo) {
+                Storage::delete($author->photo);
+            }
             $author->delete();
         });
 

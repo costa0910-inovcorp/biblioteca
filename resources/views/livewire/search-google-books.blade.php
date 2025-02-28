@@ -1,6 +1,6 @@
 <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
-        <div class="flex justify-between gap-4 flex-wrap bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg p-4">
+        <div class="flex justify-between gap-4 flex-wrap bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-4">
                 <div class="join">
                     <div>
                         <div>

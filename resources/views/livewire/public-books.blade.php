@@ -1,36 +1,21 @@
 <div class="space-y-4  pb-4">
-{{--    <div class="flex justify-center">--}}
-{{--        <livewire:search-box-with-filter queryTable="book" />--}}
-{{--        <x-search--}}
-{{--            :fields="[]"--}}
-{{--        />--}}
-{{--    </div>--}}
     <div class="flex flex-wrap sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8 justify-center">
         @foreach($books as $book)
-            <div class="card bg-base-100 flex-auto  w-72 shadow-xl">
-                <figure>
-                    <a href="{{ route('books.details', ['book' => $book->id]) }}">
+            <div class="card bg-base-100 w-72 shadow">
+                <a href="{{ route('books.details', ['book' => $book->id]) }}">
+                    <figure class="px-10 pt-10">
                         <img
+                            class="rounded-xl"
                             src="{{ $book->cover_image }}"
                             alt="{{ $book->name }}" />
-                    </a>
-                </figure>
-                <div class="card-body">
-                    <a href="{{ route('books.details', ['book' => $book->id]) }}">
-                        <h2 class="card-title">
-                           {{ \Illuminate\Support\Str::words($book->name, 5) }}
-                        </h2>
-                        <p>{{ \Illuminate\Support\Str::words($book->bibliography, 10) }}</p>
-{{--                        <div class="card-actions justify-end">--}}
-{{--                            @if($book->is_available)--}}
-{{--                                <a class="btn btn-primary btn-xs" href="{{ route('public.books.request', ['book' => $book->id]) }}">Borrow</a>--}}
-{{--                            @else--}}
-{{--                                <div class="badge badge-outline">Not available</div>--}}
-{{--                                <a class="btn btn-warning btn-xs" href="{{ route('public.add-to-wait-list', ['book' => $book->id]) }}">Add to wait list</a>--}}
-{{--                            @endif--}}
-{{--                        </div>--}}
-                    </a>
-                </div>
+                    </figure>
+                    <div class="card-body items-center text-center">
+                            <h2 class="card-title">
+                               {{ \Illuminate\Support\Str::words($book->name, 5) }}
+                            </h2>
+                            <p>{{ \Illuminate\Support\Str::words($book->bibliography, 10) }}</p>
+                    </div>
+                </a>
             </div>
         @endforeach
 

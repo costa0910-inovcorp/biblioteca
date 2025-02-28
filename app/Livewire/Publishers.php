@@ -29,7 +29,9 @@ class Publishers extends Component
     {
       // include all relate books
         DB::transaction(function () use ($publisher) {
-            Storage::delete($publisher->logo);
+            if($publisher->logo) {
+                Storage::delete($publisher->logo);
+            }
             $publisher->delete();
         });
 

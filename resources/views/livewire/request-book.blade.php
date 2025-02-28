@@ -50,5 +50,5 @@
         </div>
         <x-input-error for="booksToBorrow" />
     </div>
-    <button type="submit" class="btn btn-active btn-primary w-62 ">Borrow</button>
+    <button type="submit" class="btn btn-primary ">Borrow</button>
 </form>

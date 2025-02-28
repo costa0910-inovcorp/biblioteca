@@ -1,5 +1,4 @@
 @php
-//    @props(['method'=>'create', 'btn' => 'Create', 'fileLabel' => 'Photo'])
     if ($publisher) {
         $head = "Update $publisher->name";
         $method = 'edit';

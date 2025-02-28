@@ -13,7 +13,7 @@ class LogRepository
             ...$data,
             'user_id' => auth()?->id(),
             'user_agent' => request()->userAgent(),
-            'user_ip' => request()->ip(),
+            'ip_address' => request()->getClientIp(),
             'date' => now()->format('Y-m-d'),
             'time' => now()->format('H:i:s'),
             'id' => Str::uuid(),

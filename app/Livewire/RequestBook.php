@@ -9,6 +9,7 @@ use App\Models\BookWaitList;
 use App\Models\User;
 use App\Repositories\RequestBookRepository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
