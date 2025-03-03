@@ -11,14 +11,14 @@ jobs:
       - name: Get latest code
         uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: Use Node.js 21
+        uses: actions/setup-node@v4
         with:
-          php-version: '8.2'
-          extensions: mbstring, xml, bcmath, curl
-
-      - name: Install PHP Dependencies
-        run: composer install --no-dev --prefer-dist --optimize-autoloader
+          node-version: '21'
+      - name: Build project
+        run: |
+          npm install
+          npm run build
 
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -27,4 +27,6 @@ jobs:
           username: ${{ secrets.PROD_FTP_USERNAME }}
           password: ${{ secrets.PROD_FTP_PASSWORD }}
           protocol: ftp
+          local-dir: ./public/build/
+          server-dir: ./public/build/
           #dry-run: true
